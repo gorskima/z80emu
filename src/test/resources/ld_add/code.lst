@@ -1,0 +1,31 @@
+   1:	0000  C30600  	JP start
+   2:	0003          	op1:
+   3:	0003  19      	defb 25
+   4:	0004          	op2:
+   5:	0004  27      	defb 39
+   6:	0005          	result:
+   7:	0005  00      	defb 0
+   8:			
+   9:	0006          	start:
+  10:	0006  3A0300  	LD A,(op1)
+  11:	0009  47      	LD B,A
+  12:	000A  3A0400  	LD A,(op2)
+  13:	000D  80      	ADD A,B
+  14:	000E  320500  	LD (result),A
+  15:	0011  76      	HALT
+  16:			
+**** code.z80 ****
+
+
+
+Statistics:
+
+     4	symbols
+    18	bytes
+
+
+
+Symbol Table:
+
+op1                3     result             5     
+op2                4     start              6     

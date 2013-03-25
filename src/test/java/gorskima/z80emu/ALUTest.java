@@ -13,8 +13,7 @@ public class ALUTest {
 	@Before
 	public void setup() {
 		reg = new Registers();
-		alu = new ALU();
-		alu.setRegisters(reg);
+		alu = new ALU(reg);
 	}
 	
 	@Test

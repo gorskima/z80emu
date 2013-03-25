@@ -26,4 +26,10 @@ public class Z80IntegrationTest {
 		assertThat(cpu.getReg().getRegister(Register.A), is(5));
 	}
 
+	@Test
+	public void testLoadingFromMemoryAndAdding() {
+		Z80 cpu = run("ld_add/code.bin");
+		assertThat(cpu.getMem().readWord8(5), is(64));
+	}
+
 }

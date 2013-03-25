@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Z80 {
 
 	private final Registers registers = new Registers();
-	private final ALU alu = new ALU();
+	private final ALU alu = new ALU(registers);
 	private final Decoder decoder = new Decoder();
 	private final Memory memory;
 
@@ -140,6 +140,14 @@ public class Z80 {
 			int addr = fetchWord16();
 			int n = memory.readWord8(addr);
 			registers.setRegister(Register.A, n);
+			break;
+		}
+
+		// LD (nn),A
+		case 0x32: {
+			int addr = fetchWord16();
+			int n = registers.getRegister(Register.A);
+			memory.writeWord8(addr, n);
 			break;
 		}
 
@@ -556,9 +564,7 @@ public class Z80 {
 		}
 
 		default:
-			System.out.printf("OpCode %x not supported", opCode);
-			System.exit(0);
-
+			throw new IllegalArgumentException(String.format("OpCode 0x%x not supported", opCode));
 		}
 
 		// System.out.println(reg);

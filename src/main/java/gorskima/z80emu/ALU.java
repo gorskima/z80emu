@@ -3,10 +3,14 @@ package gorskima.z80emu;
 
 public class ALU {
 
-	private Registers registers;
+	private final Registers registers;
 
-	public void setRegisters(final Registers registers) {
+	public ALU(final Registers registers) {
 		this.registers = registers;
+	}
+
+	public ALU() {
+		this(new Registers());
 	}
 
 	public void add(final int op2) {

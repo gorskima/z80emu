@@ -28,7 +28,7 @@ public class CpuRunner {
 
 	private static void writeMemory(final Memory memory, final byte[] code) {
 		for (int addr = 0; addr < code.length; addr++) {
-			memory.writeWord8(addr, code[addr]);
+			memory.writeWord8(addr, 0xFF & code[addr]);
 		}
 	}
 

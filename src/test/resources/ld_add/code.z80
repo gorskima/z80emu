@@ -1,0 +1,16 @@
+JP start
+op1:
+defb 25
+op2:
+defb 39
+result:
+defb 0
+
+start:
+LD A,(op1)
+LD B,A
+LD A,(op2)
+ADD A,B
+LD (result),A
+HALT
+
