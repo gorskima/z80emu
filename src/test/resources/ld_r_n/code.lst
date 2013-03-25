@@ -1,0 +1,11 @@
+   1:	0000  3E05    	LD A,5
+   2:	0002  76      	HALT
+   3:			
+**** code.z80 ****
+
+
+
+Statistics:
+
+     0	symbols
+     3	bytes

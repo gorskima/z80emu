@@ -1,0 +1,12 @@
+   1:	0000  00      	NOP
+   2:	0001  00      	NOP
+   3:	0002  76      	HALT
+   4:			
+**** code.z80 ****
+
+
+
+Statistics:
+
+     0	symbols
+     3	bytes
