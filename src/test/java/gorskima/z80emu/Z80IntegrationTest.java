@@ -23,13 +23,13 @@ public class Z80IntegrationTest {
 	@Test
 	public void testLoadingNumberIntoRegister() {
 		Z80 cpu = run("ld_r_n/code.bin");
-		assertThat(cpu.getReg().getRegister(Register.A), is(5));
+		assertThat(cpu.getRegisters().getRegister(Register.A), is(5));
 	}
 
 	@Test
 	public void testLoadingFromMemoryAndAdding() {
 		Z80 cpu = run("ld_add/code.bin");
-		assertThat(cpu.getMem().readWord8(5), is(64));
+		assertThat(cpu.getMemory().readWord8(5), is(64));
 	}
 
 }

@@ -21,21 +21,6 @@ public class Z80 {
 		this(new Memory());
 	}
 
-	public int fetchWord8() {
-		int pc = registers.getRegister(Register.PC);
-		int word = memory.readWord8(pc);
-		registers.incPC();
-		return word;
-	}
-
-	public int fetchWord16() {
-		int pc = registers.getRegister(Register.PC);
-		int word = memory.readWord16(pc);
-		registers.incPC();
-		registers.incPC();
-		return word;
-	}
-
 	public void step() {
 		int opCode = fetchWord8();
 
@@ -566,9 +551,21 @@ public class Z80 {
 		default:
 			throw new IllegalArgumentException(String.format("OpCode 0x%x not supported", opCode));
 		}
+	}
 
-		// System.out.println(reg);
-		// new Scanner(System.in).nextLine();
+	private int fetchWord8() {
+		int pc = registers.getRegister(Register.PC);
+		int word = memory.readWord8(pc);
+		registers.incPC();
+		return word;
+	}
+
+	private int fetchWord16() {
+		int pc = registers.getRegister(Register.PC);
+		int word = memory.readWord16(pc);
+		registers.incPC();
+		registers.incPC();
+		return word;
 	}
 
 	private int extractLowerRegisterCode(final int opCode) {
@@ -579,11 +576,11 @@ public class Z80 {
 		return (opCode >> 3) & 0x07;
 	}
 
-	public Memory getMem() {
+	public Memory getMemory() {
 		return memory;
 	}
 
-	public Registers getReg() {
+	public Registers getRegisters() {
 		return registers;
 	}
 
