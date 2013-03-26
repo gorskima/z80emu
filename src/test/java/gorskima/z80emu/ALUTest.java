@@ -69,4 +69,69 @@ public class ALUTest {
 		assertThat(reg.testFlag(Flag.C), is(false));
 	}
 
+	@Test
+	public void testCp() {
+		reg.setRegister(A, 7);
+		alu.cp(5);
+		assertThat(reg.getRegister(A), is(7));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void testCp_whenEqual() {
+		reg.setRegister(A, 8);
+		alu.cp(8);
+		assertThat(reg.getRegister(A), is(8));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void testInc() {
+		reg.setRegister(A, 127);
+		alu.inc(A);
+		assertThat(reg.getRegister(A), is(128));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(PV), is(true));
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void testDec() {
+		reg.setRegister(A, 0);
+		alu.dec(A);
+		assertThat(reg.getRegister(A), is(255));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.testFlag(Flag.C), is(true));
+	}
+
+	@Test
+	public void testNeg() {
+		reg.setRegister(A, 7);
+		alu.neg();
+		assertThat(reg.getRegister(A), is(249));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.testFlag(Flag.C), is(true));
+	}
+
 }
