@@ -118,6 +118,22 @@ public class Z80 {
 			break;
 		}
 
+		// LD (HL),r
+		case 0x70:
+		case 0x71:
+		case 0x72:
+		case 0x73:
+		case 0x74:
+		case 0x75:
+		case 0x77: {
+			int srcRegCode = extractLowerRegisterCode(opCode);
+			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			int n = registers.getRegister(srcReg);
+			int hl = registers.getRegister(Register.HL);
+			memory.writeWord8(hl, n);
+			break;
+		}
+
 		// LD A,(nn)
 		case 0x3A: {
 			int addr = fetchWord16();

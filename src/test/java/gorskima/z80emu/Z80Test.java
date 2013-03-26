@@ -3,6 +3,7 @@ package gorskima.z80emu;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.B;
 import static gorskima.z80emu.Register.C;
+import static gorskima.z80emu.Register.D;
 import static gorskima.z80emu.Register.E;
 import static gorskima.z80emu.Register.HL;
 import static gorskima.z80emu.Register.IX;
@@ -51,6 +52,15 @@ public class Z80Test {
 		mem.writeWord8(107, 86);
 		cpu.step();
 		assertThat(reg.getRegister(E), is(86));
+	}
+
+	@Test
+	public void test_LD_HL_r() {
+		reg.setRegister(D, 9);
+		reg.setRegister(HL, 105);
+		mem.writeWord8(0, 0x72);
+		cpu.step();
+		assertThat(mem.readWord8(105), is(9));
 	}
 
 }
