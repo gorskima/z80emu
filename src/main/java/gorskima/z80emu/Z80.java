@@ -448,9 +448,30 @@ public class Z80 {
 			opCode = fetchWord8();
 
 			switch (opCode) {
+			
+			/*
+			 * 8-bit load group
+			 */
+			
+			// LD r,(IX+d)
+			case 0x46:
+			case 0x4E:
+			case 0x56:
+			case 0x5E:
+			case 0x66:
+			case 0x6E:
+			case 0x7E: {
+				int d = fetchWord8();
+				int ix = registers.getRegister(Register.IX);
+				int n = memory.readWord8(ix + d);
+				int destRegCode = extractHigherRegisterCode(opCode);
+				Register destReg = decoder.decode(RegisterType.r, destRegCode);
+				registers.setRegister(destReg, n);
+				break;
+			}
 
 			/*
-			 * 16-bit load groups
+			 * 16-bit load group
 			 */
 
 			// LD IX,nn

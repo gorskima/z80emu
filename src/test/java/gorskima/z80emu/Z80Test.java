@@ -3,7 +3,9 @@ package gorskima.z80emu;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.B;
 import static gorskima.z80emu.Register.C;
+import static gorskima.z80emu.Register.E;
 import static gorskima.z80emu.Register.HL;
+import static gorskima.z80emu.Register.IX;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -38,6 +40,17 @@ public class Z80Test {
 		mem.writeWord8(350, 718);
 		cpu.step();
 		assertThat(reg.getRegister(C), is(718));
+	}
+
+	@Test
+	public void test_LD_r_IX_plus_d() {
+		reg.setRegister(IX, 100);
+		mem.writeWord8(0, 0xDD); // LD E,(IX+7)
+		mem.writeWord8(1, 0x5E);
+		mem.writeWord8(2, 7);
+		mem.writeWord8(107, 86);
+		cpu.step();
+		assertThat(reg.getRegister(E), is(86));
 	}
 
 }
