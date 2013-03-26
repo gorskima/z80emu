@@ -30,12 +30,20 @@ public class Adder {
 		return result;
 	}
 
-	public int sub(final int op1, int op2, int carryIn) {
-		op2 = negateByte(op2);
-		carryIn = negateBit(carryIn);
-		return add(op1, op2, carryIn);
+	public int sub(final int op1, final int op2, final int carryIn) {
+		int invertedOp2 = invertByte(op2);
+		int invertedCarryIn = invertBit(carryIn);
+		return add(op1, invertedOp2, invertedCarryIn);
 	}
 	
+	private int invertByte(final int value) {
+		return ~value & 0xFF;
+	}
+
+	private int invertBit(final int value) {
+		return ~value & 0x01;
+	}
+
 	public boolean isCarry() {
 		return carries.get(7);
 	}
@@ -54,14 +62,6 @@ public class Adder {
 	
 	public boolean isOverflow() {
 		return carries.get(7) ^ carries.get(6);
-	}
-
-	private int negateByte(final int a) {
-		return ~a & 0xFF;
-	}
-
-	private int negateBit(final int a) {
-		return ~a & 0x01;
 	}
 
 }

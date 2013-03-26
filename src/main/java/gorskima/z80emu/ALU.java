@@ -20,12 +20,7 @@ public class ALU {
 		int result = adder.add(op1, op2, 0);
 		registers.setRegister(Register.A, result);
 
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfCarry());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, adder.isCarry());
+		setAdditionFlags(adder, result);
 	}
 
 	public void adc(final int op2) {
@@ -36,12 +31,7 @@ public class ALU {
 		int result = adder.add(op1, op2, carry);
 		registers.setRegister(Register.A, result);
 
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfCarry());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, adder.isCarry());
+		setAdditionFlags(adder, result);
 	}
 
 	public void sub(final int op2) {
@@ -51,12 +41,7 @@ public class ALU {
 		int result = adder.sub(op1, op2, 0);
 		registers.setRegister(Register.A, result);
 
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfBorrow());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, true);
-		registers.setFlag(Flag.C, adder.isBorrow());
+		setSubstractionFlags(adder, result);
 	}
 
 	public void sbc(final int op2) {
@@ -67,12 +52,7 @@ public class ALU {
 		int result = adder.sub(op1, op2, carry);
 		registers.setRegister(Register.A, result);
 
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfBorrow());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, true);
-		registers.setFlag(Flag.C, adder.isBorrow());
+		setSubstractionFlags(adder, result);
 	}
 
 	public void inc(final Register r) {
@@ -82,12 +62,7 @@ public class ALU {
 		int result = adder.add(op1, 1, 0);
 		registers.setRegister(r, result);
 	
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfCarry());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, adder.isCarry());
+		setAdditionFlags(adder, result);
 	}
 
 	public void dec(final Register r) {
@@ -97,12 +72,7 @@ public class ALU {
 		int result = adder.sub(op1, 1, 0);
 		registers.setRegister(r, result);
 	
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfBorrow());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, true);
-		registers.setFlag(Flag.C, adder.isBorrow());
+		setSubstractionFlags(adder, result);
 	}
 
 	public void cp(final int op2) {
@@ -111,12 +81,7 @@ public class ALU {
 		Adder adder = new Adder();
 		int result = adder.sub(op1, op2, 0);
 	
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, adder.isHalfBorrow());
-		registers.setFlag(Flag.PV, adder.isOverflow());
-		registers.setFlag(Flag.N, true);
-		registers.setFlag(Flag.C, adder.isBorrow());
+		setSubstractionFlags(adder, result);
 	}
 
 	public void neg() {
@@ -126,6 +91,19 @@ public class ALU {
 		int result = adder.sub(0, op2, 0);
 		registers.setRegister(Register.A, result);
 	
+		setSubstractionFlags(adder, result);
+	}
+
+	private void setAdditionFlags(final Adder adder, final int result) {
+		registers.setFlag(Flag.S, getSign(result));
+		registers.setFlag(Flag.Z, isZero(result));
+		registers.setFlag(Flag.H, adder.isHalfCarry());
+		registers.setFlag(Flag.PV, adder.isOverflow());
+		registers.setFlag(Flag.N, false);
+		registers.setFlag(Flag.C, adder.isCarry());
+	}
+
+	private void setSubstractionFlags(final Adder adder, final int result) {
 		registers.setFlag(Flag.S, getSign(result));
 		registers.setFlag(Flag.Z, isZero(result));
 		registers.setFlag(Flag.H, adder.isHalfBorrow());
@@ -139,12 +117,8 @@ public class ALU {
 		int result = (op1 & op2) & 0xFF;
 		registers.setRegister(Register.A, result);
 	
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
+		setLogicalFlags(result);
 		registers.setFlag(Flag.H, true);
-		registers.setFlag(Flag.PV, getParity(result));
-		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, false);
 	}
 
 	public void or(final int op2) {
@@ -152,22 +126,22 @@ public class ALU {
 		int result = (op1 | op2) & 0xFF;
 		registers.setRegister(Register.A, result);
 	
-		registers.setFlag(Flag.S, getSign(result));
-		registers.setFlag(Flag.Z, isZero(result));
+		setLogicalFlags(result);
 		registers.setFlag(Flag.H, false);
-		registers.setFlag(Flag.PV, getParity(result));
-		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, false);
 	}
 
 	public void xor(final int op2) {
 		int op1 = registers.getRegister(Register.A);
 		int result = (op1 ^ op2) & 0xFF;
 		registers.setRegister(Register.A, result);
-	
+
+		setLogicalFlags(result);
+		registers.setFlag(Flag.H, false);
+	}
+
+	private void setLogicalFlags(final int result) {
 		registers.setFlag(Flag.S, getSign(result));
 		registers.setFlag(Flag.Z, isZero(result));
-		registers.setFlag(Flag.H, false);
 		registers.setFlag(Flag.PV, getParity(result));
 		registers.setFlag(Flag.N, false);
 		registers.setFlag(Flag.C, false);
@@ -183,16 +157,16 @@ public class ALU {
 		registers.setFlag(Flag.N, true);
 	}
 
+	private int invert(final int op) {
+		return ~op & 0xFF;
+	}
+
 	private boolean getSign(final int op) {
 		return ((op >> 7) & 0x01) == 1;
 	}
 
 	private boolean isZero(final int op) {
 		return op == 0;
-	}
-
-	private int invert(final int op) {
-		return ~op & 0xFF;
 	}
 
 	private boolean getParity(final int op) {
