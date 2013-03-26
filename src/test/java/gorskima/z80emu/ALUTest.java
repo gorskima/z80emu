@@ -122,6 +122,45 @@ public class ALUTest {
 	}
 
 	@Test
+	public void testAnd() {
+		reg.setRegister(A, 70);
+		alu.and(200);
+		assertThat(reg.getRegister(A), is(64));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void testOr() {
+		reg.setRegister(A, 70);
+		alu.or(200);
+		assertThat(reg.getRegister(A), is(206));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void testXor() {
+		reg.setRegister(A, 70);
+		alu.xor(200);
+		assertThat(reg.getRegister(A), is(142));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(PV), is(true));
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
 	public void testNeg() {
 		reg.setRegister(A, 7);
 		alu.neg();
