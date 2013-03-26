@@ -1,13 +1,10 @@
 package gorskima.z80emu;
 
-import java.util.ArrayList;
-import java.util.List;
-
-//TODO refactor
 public class Adder {
 
-	private List<Boolean> carries = new ArrayList<Boolean>();
+	private boolean[] carries = new boolean[8];
 
+	// TODO refactor
 	public int add(final int op1, final int op2, final int carryIn) {
 		int result = 0;
 		int carry = carryIn;
@@ -24,7 +21,7 @@ public class Adder {
 				result &= 0x7F;
 			}
 			carry = ((sum >> 1) & 0x01);
-			carries.add(carry == 1);
+			carries[i] = (carry == 1);
 		}
 
 		return result;
@@ -45,23 +42,23 @@ public class Adder {
 	}
 
 	public boolean isCarry() {
-		return carries.get(7);
+		return carries[7];
 	}
 	
 	public boolean isBorrow() {
-		return ! carries.get(7);
+		return !isCarry();
 	}
 	
 	public boolean isHalfCarry() {
-		return carries.get(3);
+		return carries[3];
 	}
 	
 	public boolean isHalfBorrow() {
-		return ! carries.get(3);
+		return !isHalfCarry();
 	}
 	
 	public boolean isOverflow() {
-		return carries.get(7) ^ carries.get(6);
+		return carries[7] ^ carries[6];
 	}
 
 }
