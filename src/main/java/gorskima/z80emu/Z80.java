@@ -6,19 +6,17 @@ import java.util.Scanner;
 
 public class Z80 {
 
-	private final Registers registers = new Registers();
-	private final ALU alu = new ALU(registers);
+	private final Registers registers;
+	private final ALU alu;
 	private final Decoder decoder = new Decoder();
 	private final Memory memory;
 
 	private boolean halt = false;
 	
-	public Z80(final Memory memory) {
+	public Z80(final Registers registers, final Memory memory) {
+		this.registers = registers;
 		this.memory = memory;
-	}
-
-	public Z80() {
-		this(new Memory());
+		this.alu = new ALU(registers);
 	}
 
 	public void step() {

@@ -23,7 +23,7 @@ public class CpuRunner {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		return new Z80(memory);
+		return new Z80(new Registers(), memory);
 	}
 
 	private static void writeMemory(final Memory memory, final byte[] code) {
