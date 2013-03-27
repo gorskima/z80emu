@@ -134,6 +134,29 @@ public class Z80 {
 			break;
 		}
 
+		// LD (HL),n
+		case 0x36: {
+			int n = fetchWord8();
+			int addr = registers.getRegister(Register.HL);
+			memory.writeWord8(addr, n);
+		}
+
+		// LD A,(BC)
+		case 0x0A: {
+			int addr = registers.getRegister(Register.BC);
+			int n = memory.readWord8(addr);
+			registers.setRegister(Register.A, n);
+			break;
+		}
+
+		// LD A,(BC)
+		case 0x1A: {
+			int addr = registers.getRegister(Register.DE);
+			int n = memory.readWord8(addr);
+			registers.setRegister(Register.A, n);
+			break;
+		}
+
 		// LD A,(nn)
 		case 0x3A: {
 			int addr = fetchWord16();

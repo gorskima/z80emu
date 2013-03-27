@@ -6,8 +6,10 @@ import static gorskima.z80emu.Flag.S;
 import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.B;
+import static gorskima.z80emu.Register.BC;
 import static gorskima.z80emu.Register.C;
 import static gorskima.z80emu.Register.D;
+import static gorskima.z80emu.Register.DE;
 import static gorskima.z80emu.Register.E;
 import static gorskima.z80emu.Register.HL;
 import static gorskima.z80emu.Register.I;
@@ -80,6 +82,33 @@ public class Z80Test {
 		mem.writeWord8(0, 0x72);
 		cpu.step();
 		assertThat(mem.readWord8(105), is(9));
+	}
+	
+	@Test
+	public void test_LD_HL_n() {
+		reg.setRegister(HL, 200);
+		mem.writeWord8(0, 0x36);
+		mem.writeWord8(1, 55);
+		cpu.step();
+		assertThat(mem.readWord8(200), is(55));
+	}
+
+	@Test
+	public void test_A_BC() {
+		reg.setRegister(BC, 2000);
+		mem.writeWord16(0, 0x0A); // LD A,(BC)
+		mem.writeWord8(2000, 33);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(33));
+	}
+
+	@Test
+	public void test_A_DE() {
+		reg.setRegister(DE, 5000);
+		mem.writeWord16(0, 0x1A); // LD A,(DE)
+		mem.writeWord8(5000, 123);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(123));
 	}
 
 	@Test
