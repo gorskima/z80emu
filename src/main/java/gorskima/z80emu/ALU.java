@@ -147,6 +147,11 @@ public class ALU {
 		registers.setFlag(Flag.C, false);
 	}
 
+	public void setSignAndZeroFlags(final int result) {
+		registers.setFlag(Flag.S, getSign(result));
+		registers.setFlag(Flag.Z, isZero(result));
+	}
+
 	// TODO not sure if CPL belongs to ALU, let's leave it here for now
 	public void cpl() {
 		int op = registers.getRegister(Register.A);

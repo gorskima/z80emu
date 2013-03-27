@@ -1,12 +1,18 @@
 package gorskima.z80emu;
 
+import static gorskima.z80emu.Flag.H;
+import static gorskima.z80emu.Flag.N;
+import static gorskima.z80emu.Flag.S;
+import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.B;
 import static gorskima.z80emu.Register.C;
 import static gorskima.z80emu.Register.D;
 import static gorskima.z80emu.Register.E;
 import static gorskima.z80emu.Register.HL;
+import static gorskima.z80emu.Register.I;
 import static gorskima.z80emu.Register.IX;
+import static gorskima.z80emu.Register.R;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -61,6 +67,54 @@ public class Z80Test {
 		mem.writeWord8(0, 0x72);
 		cpu.step();
 		assertThat(mem.readWord8(105), is(9));
+	}
+
+	@Test
+	public void test_LD_A_I() {
+		reg.setRegister(I, 190);
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x57);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(190));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(H), is(false));
+		// TODO test PV flag (interrupt related)
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void test_LD_A_R() {
+		reg.setRegister(R, 215);
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x5F);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(215));
+		assertThat(reg.testFlag(S), is(true));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(H), is(false));
+		// TODO test PV flag (interrupt related)
+		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
+
+	@Test
+	public void test_LD_I_A() {
+		reg.setRegister(A, 117);
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x47);
+		cpu.step();
+		assertThat(reg.getRegister(I), is(117));
+	}
+
+	@Test
+	public void test_LD_R_A() {
+		reg.setRegister(A, 98);
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x4F);
+		cpu.step();
+		assertThat(reg.getRegister(R), is(98));
 	}
 
 }

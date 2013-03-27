@@ -550,6 +550,46 @@ public class Z80 {
 			opCode = fetchWord8();
 
 			switch (opCode) {
+			
+			/*
+			 * 8-bit load group
+			 */
+
+			// LD A,I
+			case 0x57: {
+				int n = registers.getRegister(Register.I);
+				registers.setRegister(Register.A, n);
+				alu.setSignAndZeroFlags(n);
+				registers.setFlag(Flag.H, false);
+				registers.setFlag(Flag.N, false);
+				// TODO set PV flag (interrupt related)
+				break;
+			}
+
+			// LD A,R
+			case 0x5F: {
+				int n = registers.getRegister(Register.R);
+				registers.setRegister(Register.A, n);
+				alu.setSignAndZeroFlags(n);
+				registers.setFlag(Flag.H, false);
+				registers.setFlag(Flag.N, false);
+				// TODO set PV flag (interrupt related)
+				break;
+			}
+
+			// LD I,A
+			case 0x47: {
+				int n = registers.getRegister(Register.A);
+				registers.setRegister(Register.I, n);
+				break;
+			}
+
+			// LD R,A
+			case 0x4F: {
+				int n = registers.getRegister(Register.A);
+				registers.setRegister(Register.R, n);
+				break;
+			}
 
 			/*
 			 * 16-bit load group
