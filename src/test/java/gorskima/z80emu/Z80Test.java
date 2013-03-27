@@ -12,6 +12,8 @@ import static gorskima.z80emu.Register.E;
 import static gorskima.z80emu.Register.HL;
 import static gorskima.z80emu.Register.I;
 import static gorskima.z80emu.Register.IX;
+import static gorskima.z80emu.Register.IY;
+import static gorskima.z80emu.Register.L;
 import static gorskima.z80emu.Register.R;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -58,6 +60,17 @@ public class Z80Test {
 		mem.writeWord8(107, 86);
 		cpu.step();
 		assertThat(reg.getRegister(E), is(86));
+	}
+
+	@Test
+	public void test_LD_r_IY_plus_d() {
+		reg.setRegister(IY, 75);
+		mem.writeWord8(0, 0xFD); // LD L,(IY+7)
+		mem.writeWord8(1, 0x6E);
+		mem.writeWord8(2, 8);
+		mem.writeWord8(83, 37);
+		cpu.step();
+		assertThat(reg.getRegister(L), is(37));
 	}
 
 	@Test

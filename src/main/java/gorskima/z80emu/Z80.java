@@ -515,32 +515,40 @@ public class Z80 {
 			break;
 		}
 
-		// case 0xFD: {
-		// /*
-		// * IY operations
-		// */
-		//
-		// opCode = fetchWord8();
-		//
-		// switch (opCode) {
-		//
-		// /*
-		// * 8-bit arithmetic group
-		// */
-		//
-		// // ADD A,(IY+d)
-		// case 0x86: {
-		// int d = fetchWord8();
-		// int iy = reg.getRegister(Register.IY);
-		// int n = mem.readWord8(iy + d);
-		// alu.add(n);
-		// break;
-		// }
-		//
-		// }
-		//
-		// break;
-		// }
+		case 0xFD: {
+			/*
+			 * IY operations
+			 */
+
+			opCode = fetchWord8();
+
+			switch (opCode) {
+
+			/*
+			 * 8-bit load group
+			 */
+
+			// LD r,(IY+d)
+			case 0x46:
+			case 0x4E:
+			case 0x56:
+			case 0x5E:
+			case 0x66:
+			case 0x6E:
+			case 0x7E: {
+				int d = fetchWord8();
+				int iy = registers.getRegister(Register.IY);
+				int n = memory.readWord8(iy + d);
+				int destRegCode = extractHigherRegisterCode(opCode);
+				Register destReg = decoder.decode(RegisterType.r, destRegCode);
+				registers.setRegister(destReg, n);
+				break;
+			}
+
+			}
+
+			break;
+		}
 
 		case 0xED: {
 			/*
