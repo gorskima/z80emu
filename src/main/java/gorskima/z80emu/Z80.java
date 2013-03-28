@@ -206,6 +206,13 @@ public class Z80 {
 			break;
 		}
 
+		// LD SP,HL
+		case 0xF9: {
+			int nn = registers.getRegister(Register.HL);
+			registers.setRegister(Register.SP, nn);
+			break;
+		}
+
 		// PUSH qq
 		case 0xC5:
 		case 0xD5:
@@ -701,7 +708,7 @@ public class Z80 {
 			case 0x7B: {
 				int nn = fetchWord16();
 				int value = memory.readWord16(nn);
-				int destRegCode = (opCode >> 4) & 0x03;
+				int destRegCode = (opCode >> 4) & 0x03; // TODO refactor
 				Register destReg = decoder.decode(RegisterType.dd, destRegCode);
 				registers.setRegister(destReg, value);
 				break;

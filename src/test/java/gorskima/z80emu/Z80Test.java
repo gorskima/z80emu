@@ -17,6 +17,7 @@ import static gorskima.z80emu.Register.IX;
 import static gorskima.z80emu.Register.IY;
 import static gorskima.z80emu.Register.L;
 import static gorskima.z80emu.Register.R;
+import static gorskima.z80emu.Register.SP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -245,6 +246,24 @@ public class Z80Test {
 		mem.writeWord16(1, 12345);
 		cpu.step();
 		assertThat(reg.getRegister(DE), is(12345));
+	}
+
+	@Test
+	public void test_LD_dd__nn() { // TODO change name
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x4B); // LD BC,(1000)
+		mem.writeWord16(2, 1000);
+		mem.writeWord8(1000, 123);
+		cpu.step();
+		assertThat(reg.getRegister(BC), is(123));
+	}
+
+	@Test
+	public void test_LD_SP_HL() {
+		reg.setRegister(HL, 25000);
+		mem.writeWord8(0, 0xF9);
+		cpu.step();
+		assertThat(reg.getRegister(SP), is(25000));
 	}
 
 }
