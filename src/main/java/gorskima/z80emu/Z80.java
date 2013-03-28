@@ -525,6 +525,32 @@ public class Z80 {
 				break;
 			}
 
+			// LD (IX+d),r
+			case 0x70:
+			case 0x71:
+			case 0x72:
+			case 0x73:
+			case 0x74:
+			case 0x75:
+			case 0x77: {
+				int d = fetchWord8();
+				int ix = registers.getRegister(Register.IX);
+				int srcRegCode = extractLowerRegisterCode(opCode);
+				Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+				int n = registers.getRegister(srcReg);
+				int addr = displace(ix, d);
+				memory.writeWord8(addr, n);
+			}
+
+			// LD (IX+d),n
+			case 0x36: {
+				int d = fetchWord8();
+				int n = fetchWord8();
+				int ix = registers.getRegister(Register.IX);
+				int addr = displace(ix, d);
+				memory.writeWord8(addr, n);
+			}
+
 			/*
 			 * 16-bit load group
 			 */
@@ -582,6 +608,32 @@ public class Z80 {
 				Register destReg = decoder.decode(RegisterType.r, destRegCode);
 				registers.setRegister(destReg, n);
 				break;
+			}
+
+			// LD (IY+d),r
+			case 0x70:
+			case 0x71:
+			case 0x72:
+			case 0x73:
+			case 0x74:
+			case 0x75:
+			case 0x77: {
+				int d = fetchWord8();
+				int iy = registers.getRegister(Register.IY);
+				int srcRegCode = extractLowerRegisterCode(opCode);
+				Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+				int n = registers.getRegister(srcReg);
+				int addr = displace(iy, d);
+				memory.writeWord8(addr, n);
+			}
+			
+			// LD (IY+d),n
+			case 0x36: {
+				int d = fetchWord8();
+				int n = fetchWord8();
+				int iy = registers.getRegister(Register.IY);
+				int addr = displace(iy, d);
+				memory.writeWord8(addr, n);
 			}
 
 			}
@@ -696,6 +748,10 @@ public class Z80 {
 
 	private int extractHigherRegisterCode(final int opCode) {
 		return (opCode >> 3) & 0x07;
+	}
+
+	private int displace(final int addr, final int d) {
+		return addr + (byte) d;
 	}
 
 	public Memory getMemory() {

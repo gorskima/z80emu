@@ -85,12 +85,56 @@ public class Z80Test {
 	}
 	
 	@Test
+	public void test_LD_IX_plus_d_r() {
+		reg.setRegister(IX, 100);
+		reg.setRegister(E, 55);
+		mem.writeWord8(0, 0xDD); // LD (IX+(-3)),E
+		mem.writeWord8(1, 0x73);
+		mem.writeWord8(2, 253);
+		cpu.step();
+		assertThat(mem.readWord8(97), is(55));
+	}
+
+	@Test
+	public void test_LD_IY_plus_d_r() {
+		reg.setRegister(IY, 500);
+		reg.setRegister(B, 71);
+		mem.writeWord8(0, 0xFD); // LD (IX+75),B
+		mem.writeWord8(1, 0x70);
+		mem.writeWord8(2, 75);
+		cpu.step();
+		assertThat(mem.readWord8(575), is(71));
+	}
+
+	@Test
 	public void test_LD_HL_n() {
 		reg.setRegister(HL, 200);
 		mem.writeWord8(0, 0x36); // LD (HL),55
 		mem.writeWord8(1, 55);
 		cpu.step();
 		assertThat(mem.readWord8(200), is(55));
+	}
+
+	@Test
+	public void test_LD_IX_plus_d_n() {
+		reg.setRegister(IX, 100);
+		mem.writeWord8(0, 0xDD); // LD (IX+88),7
+		mem.writeWord8(1, 0x36);
+		mem.writeWord8(2, 88);
+		mem.writeWord8(3, 7);
+		cpu.step();
+		assertThat(mem.readWord8(188), is(7));
+	}
+
+	@Test
+	public void test_LD_IY_plus_d_n() {
+		reg.setRegister(IY, 30000);
+		mem.writeWord8(0, 0xFD); // LD (IY+(-10)),21
+		mem.writeWord8(1, 0x36);
+		mem.writeWord8(2, 246);
+		mem.writeWord8(3, 21);
+		cpu.step();
+		assertThat(mem.readWord8(29990), is(21));
 	}
 
 	@Test
