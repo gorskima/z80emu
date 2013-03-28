@@ -121,6 +121,15 @@ public class Z80Test {
 	}
 
 	@Test
+	public void test_LD_aa_A() {
+		reg.setRegister(A, 15);
+		mem.writeWord8(0, 0x32);
+		mem.writeWord16(1, 43000);
+		cpu.step();
+		assertThat(mem.readWord8(43000), is(15));
+	}
+
+	@Test
 	public void test_LD_A_I() {
 		reg.setRegister(I, 190);
 		mem.writeWord8(0, 0xED);
