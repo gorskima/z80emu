@@ -149,7 +149,7 @@ public class Z80 {
 			break;
 		}
 
-		// LD A,(BC)
+		// LD A,(DE)
 		case 0x1A: {
 			int addr = registers.getRegister(Register.DE);
 			int n = memory.readWord8(addr);
