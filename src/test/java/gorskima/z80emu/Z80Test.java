@@ -79,7 +79,7 @@ public class Z80Test {
 	public void test_LD_HL_r() {
 		reg.setRegister(D, 9);
 		reg.setRegister(HL, 105);
-		mem.writeWord8(0, 0x72);
+		mem.writeWord8(0, 0x72); // LD (HL),D
 		cpu.step();
 		assertThat(mem.readWord8(105), is(9));
 	}
@@ -87,7 +87,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_HL_n() {
 		reg.setRegister(HL, 200);
-		mem.writeWord8(0, 0x36);
+		mem.writeWord8(0, 0x36); // LD (HL),55
 		mem.writeWord8(1, 55);
 		cpu.step();
 		assertThat(mem.readWord8(200), is(55));
@@ -113,7 +113,7 @@ public class Z80Test {
 
 	@Test
 	public void test_LD_A_nn() {
-		mem.writeWord8(0, 0x3A);
+		mem.writeWord8(0, 0x3A); // LD A,(25000)
 		mem.writeWord16(1, 25000);
 		mem.writeWord8(25000, 7);
 		cpu.step();
@@ -124,7 +124,7 @@ public class Z80Test {
 	public void test_LD_BC_A() {
 		reg.setRegister(A, 59);
 		reg.setRegister(BC, 13300);
-		mem.writeWord8(0, 0x02);
+		mem.writeWord8(0, 0x02); // LD (BC),A
 		cpu.step();
 		assertThat(mem.readWord8(13300), is(59));
 	}
@@ -133,7 +133,7 @@ public class Z80Test {
 	public void test_LD_DE_A() {
 		reg.setRegister(A, 17);
 		reg.setRegister(DE, 5000);
-		mem.writeWord8(0, 0x12);
+		mem.writeWord8(0, 0x12); // LD (DE),A
 		cpu.step();
 		assertThat(mem.readWord8(5000), is(17));
 	}
@@ -141,7 +141,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_nn_A() {
 		reg.setRegister(A, 15);
-		mem.writeWord8(0, 0x32);
+		mem.writeWord8(0, 0x32); // LD (43000),A
 		mem.writeWord16(1, 43000);
 		cpu.step();
 		assertThat(mem.readWord8(43000), is(15));
@@ -150,7 +150,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_A_I() {
 		reg.setRegister(I, 190);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // LD A,I
 		mem.writeWord8(1, 0x57);
 		cpu.step();
 		assertThat(reg.getRegister(A), is(190));
@@ -165,7 +165,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_A_R() {
 		reg.setRegister(R, 215);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // LD A,R
 		mem.writeWord8(1, 0x5F);
 		cpu.step();
 		assertThat(reg.getRegister(A), is(215));
@@ -180,7 +180,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_I_A() {
 		reg.setRegister(A, 117);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // LD I,A
 		mem.writeWord8(1, 0x47);
 		cpu.step();
 		assertThat(reg.getRegister(I), is(117));
@@ -189,7 +189,7 @@ public class Z80Test {
 	@Test
 	public void test_LD_R_A() {
 		reg.setRegister(A, 98);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // LD R,A
 		mem.writeWord8(1, 0x4F);
 		cpu.step();
 		assertThat(reg.getRegister(R), is(98));
