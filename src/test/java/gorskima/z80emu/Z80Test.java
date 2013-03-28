@@ -121,7 +121,7 @@ public class Z80Test {
 	}
 
 	@Test
-	public void test_LD_aa_A() {
+	public void test_LD_nn_A() {
 		reg.setRegister(A, 15);
 		mem.writeWord8(0, 0x32);
 		mem.writeWord16(1, 43000);
