@@ -21,7 +21,15 @@ public class Z80 {
 
 	public void step() {
 		int opCode = fetchWord8();
+		switch (opCode) {
+			case 0xDD: stepPrefixedWithDD(); break;
+			case 0xFD: stepPrefixedWithFD(); break;
+			case 0xED: stepPrefixedWithED(); break;
+			default: stepUnprefixed(opCode);
+		}
+	}
 
+	private void stepUnprefixed(final int opCode) {
 		switch (opCode) {
 
 		/*
@@ -502,235 +510,241 @@ public class Z80 {
 			break;
 		}
 
-		case 0xDD: {
-			/*
-			 * IX operations
-			 */
+		default:
+			handleUnsupportedOpCode(opCode);
+		}
+	}
 
-			opCode = fetchWord8();
+	private void stepPrefixedWithDD() {
+		/*
+		 * IX operations
+		 */
 
-			switch (opCode) {
-			
-			/*
-			 * 8-bit load group
-			 */
-			
-			// LD r,(IX+d)
-			case 0x46:
-			case 0x4E:
-			case 0x56:
-			case 0x5E:
-			case 0x66:
-			case 0x6E:
-			case 0x7E: {
-				int d = fetchWord8();
-				int ix = registers.getRegister(Register.IX);
-				int n = memory.readWord8(ix + d);
-				int destRegCode = extractHigherRegisterCode(opCode);
-				Register destReg = decoder.decode(RegisterType.r, destRegCode);
-				registers.setRegister(destReg, n);
-				break;
-			}
+		int opCode = fetchWord8();
 
-			// LD (IX+d),r
-			case 0x70:
-			case 0x71:
-			case 0x72:
-			case 0x73:
-			case 0x74:
-			case 0x75:
-			case 0x77: {
-				int d = fetchWord8();
-				int ix = registers.getRegister(Register.IX);
-				int srcRegCode = extractLowerRegisterCode(opCode);
-				Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
-				int n = registers.getRegister(srcReg);
-				int addr = displace(ix, d);
-				memory.writeWord8(addr, n);
-			}
+		switch (opCode) {
 
-			// LD (IX+d),n
-			case 0x36: {
-				int d = fetchWord8();
-				int n = fetchWord8();
-				int ix = registers.getRegister(Register.IX);
-				int addr = displace(ix, d);
-				memory.writeWord8(addr, n);
-			}
+		/*
+		 * 8-bit load group
+		 */
 
-			/*
-			 * 16-bit load group
-			 */
-
-			// LD IX,nn
-			case 0x21: {
-				int nn = fetchWord16();
-				registers.setRegister(Register.IX, nn);
-				break;
-			}
-
-			/*
-			 * 8-bit arithmetic group
-			 */
-
-			// ADD A,(IX+d)
-			case 0x86: {
-				int d = fetchWord8();
-				int ix = registers.getRegister(Register.IX);
-				int n = memory.readWord8(ix + d);
-				alu.add(n);
-				break;
-			}
-
-			}
-
+		// LD r,(IX+d)
+		case 0x46:
+		case 0x4E:
+		case 0x56:
+		case 0x5E:
+		case 0x66:
+		case 0x6E:
+		case 0x7E: {
+			int d = fetchWord8();
+			int ix = registers.getRegister(Register.IX);
+			int n = memory.readWord8(ix + d);
+			int destRegCode = extractHigherRegisterCode(opCode);
+			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			registers.setRegister(destReg, n);
 			break;
 		}
 
-		case 0xFD: {
-			/*
-			 * IY operations
-			 */
+		// LD (IX+d),r
+		case 0x70:
+		case 0x71:
+		case 0x72:
+		case 0x73:
+		case 0x74:
+		case 0x75:
+		case 0x77: {
+			int d = fetchWord8();
+			int ix = registers.getRegister(Register.IX);
+			int srcRegCode = extractLowerRegisterCode(opCode);
+			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			int n = registers.getRegister(srcReg);
+			int addr = displace(ix, d);
+			memory.writeWord8(addr, n);
+		}
 
-			opCode = fetchWord8();
+		// LD (IX+d),n
+		case 0x36: {
+			int d = fetchWord8();
+			int n = fetchWord8();
+			int ix = registers.getRegister(Register.IX);
+			int addr = displace(ix, d);
+			memory.writeWord8(addr, n);
+		}
 
-			switch (opCode) {
+		/*
+		 * 16-bit load group
+		 */
 
-			/*
-			 * 8-bit load group
-			 */
-
-			// LD r,(IY+d)
-			case 0x46:
-			case 0x4E:
-			case 0x56:
-			case 0x5E:
-			case 0x66:
-			case 0x6E:
-			case 0x7E: {
-				int d = fetchWord8();
-				int iy = registers.getRegister(Register.IY);
-				int n = memory.readWord8(iy + d);
-				int destRegCode = extractHigherRegisterCode(opCode);
-				Register destReg = decoder.decode(RegisterType.r, destRegCode);
-				registers.setRegister(destReg, n);
-				break;
-			}
-
-			// LD (IY+d),r
-			case 0x70:
-			case 0x71:
-			case 0x72:
-			case 0x73:
-			case 0x74:
-			case 0x75:
-			case 0x77: {
-				int d = fetchWord8();
-				int iy = registers.getRegister(Register.IY);
-				int srcRegCode = extractLowerRegisterCode(opCode);
-				Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
-				int n = registers.getRegister(srcReg);
-				int addr = displace(iy, d);
-				memory.writeWord8(addr, n);
-			}
-			
-			// LD (IY+d),n
-			case 0x36: {
-				int d = fetchWord8();
-				int n = fetchWord8();
-				int iy = registers.getRegister(Register.IY);
-				int addr = displace(iy, d);
-				memory.writeWord8(addr, n);
-			}
-
-			}
-
+		// LD IX,nn
+		case 0x21: {
+			int nn = fetchWord16();
+			registers.setRegister(Register.IX, nn);
 			break;
 		}
 
-		case 0xED: {
-			/*
-			 * (nn) operations?
-			 */
+		/*
+		 * 8-bit arithmetic group
+		 */
 
-			opCode = fetchWord8();
-
-			switch (opCode) {
-			
-			/*
-			 * 8-bit load group
-			 */
-
-			// LD A,I
-			case 0x57: {
-				int n = registers.getRegister(Register.I);
-				registers.setRegister(Register.A, n);
-				alu.setSignAndZeroFlags(n);
-				registers.setFlag(Flag.H, false);
-				registers.setFlag(Flag.N, false);
-				// TODO set PV flag (interrupt related)
-				break;
-			}
-
-			// LD A,R
-			case 0x5F: {
-				int n = registers.getRegister(Register.R);
-				registers.setRegister(Register.A, n);
-				alu.setSignAndZeroFlags(n);
-				registers.setFlag(Flag.H, false);
-				registers.setFlag(Flag.N, false);
-				// TODO set PV flag (interrupt related)
-				break;
-			}
-
-			// LD I,A
-			case 0x47: {
-				int n = registers.getRegister(Register.A);
-				registers.setRegister(Register.I, n);
-				break;
-			}
-
-			// LD R,A
-			case 0x4F: {
-				int n = registers.getRegister(Register.A);
-				registers.setRegister(Register.R, n);
-				break;
-			}
-
-			/*
-			 * 16-bit load group
-			 */
-
-			// LD dd,(nn)
-			case 0x4B:
-			case 0x5B:
-			case 0x6B:
-			case 0x7B: {
-				int nn = fetchWord16();
-				int value = memory.readWord16(nn);
-				int destRegCode = (opCode >> 4) & 0x03; // TODO refactor
-				Register destReg = decoder.decode(RegisterType.dd, destRegCode);
-				registers.setRegister(destReg, value);
-				break;
-			}
-
-			/*
-			 * General-purpose arithmetic and CPU control groups
-			 */
-
-			// NEG
-			case 0x44: {
-				alu.neg();
-				break;
-			}
-
-			}
-
+		// ADD A,(IX+d)
+		case 0x86: {
+			int d = fetchWord8();
+			int ix = registers.getRegister(Register.IX);
+			int n = memory.readWord8(ix + d);
+			alu.add(n);
 			break;
 		}
 
 		default:
-			throw new IllegalArgumentException(String.format("OpCode 0x%x not supported", opCode));
+			handleUnsupportedOpCode(opCode);
+
+		}
+	}
+
+	private void stepPrefixedWithFD() {
+		/*
+		 * IY operations
+		 */
+
+		int opCode = fetchWord8();
+
+		switch (opCode) {
+
+		/*
+		 * 8-bit load group
+		 */
+
+		// LD r,(IY+d)
+		case 0x46:
+		case 0x4E:
+		case 0x56:
+		case 0x5E:
+		case 0x66:
+		case 0x6E:
+		case 0x7E: {
+			int d = fetchWord8();
+			int iy = registers.getRegister(Register.IY);
+			int n = memory.readWord8(iy + d);
+			int destRegCode = extractHigherRegisterCode(opCode);
+			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			registers.setRegister(destReg, n);
+			break;
+		}
+
+		// LD (IY+d),r
+		case 0x70:
+		case 0x71:
+		case 0x72:
+		case 0x73:
+		case 0x74:
+		case 0x75:
+		case 0x77: {
+			int d = fetchWord8();
+			int iy = registers.getRegister(Register.IY);
+			int srcRegCode = extractLowerRegisterCode(opCode);
+			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			int n = registers.getRegister(srcReg);
+			int addr = displace(iy, d);
+			memory.writeWord8(addr, n);
+			break;
+		}
+
+		// LD (IY+d),n
+		case 0x36: {
+			int d = fetchWord8();
+			int n = fetchWord8();
+			int iy = registers.getRegister(Register.IY);
+			int addr = displace(iy, d);
+			memory.writeWord8(addr, n);
+			break;
+		}
+
+		default:
+			handleUnsupportedOpCode(opCode);
+
+		}
+	}
+
+	private void stepPrefixedWithED() {
+		int opCode;
+		/*
+		 * (nn) operations?
+		 */
+	
+		opCode = fetchWord8();
+	
+		switch (opCode) {
+		
+		/*
+		 * 8-bit load group
+		 */
+	
+		// LD A,I
+		case 0x57: {
+			int n = registers.getRegister(Register.I);
+			registers.setRegister(Register.A, n);
+			alu.setSignAndZeroFlags(n);
+			registers.setFlag(Flag.H, false);
+			registers.setFlag(Flag.N, false);
+			// TODO set PV flag (interrupt related)
+			break;
+		}
+	
+		// LD A,R
+		case 0x5F: {
+			int n = registers.getRegister(Register.R);
+			registers.setRegister(Register.A, n);
+			alu.setSignAndZeroFlags(n);
+			registers.setFlag(Flag.H, false);
+			registers.setFlag(Flag.N, false);
+			// TODO set PV flag (interrupt related)
+			break;
+		}
+	
+		// LD I,A
+		case 0x47: {
+			int n = registers.getRegister(Register.A);
+			registers.setRegister(Register.I, n);
+			break;
+		}
+	
+		// LD R,A
+		case 0x4F: {
+			int n = registers.getRegister(Register.A);
+			registers.setRegister(Register.R, n);
+			break;
+		}
+	
+		/*
+		 * 16-bit load group
+		 */
+	
+		// LD dd,(nn)
+		case 0x4B:
+		case 0x5B:
+		case 0x6B:
+		case 0x7B: {
+			int nn = fetchWord16();
+			int value = memory.readWord16(nn);
+			int destRegCode = (opCode >> 4) & 0x03; // TODO refactor
+			Register destReg = decoder.decode(RegisterType.dd, destRegCode);
+			registers.setRegister(destReg, value);
+			break;
+		}
+	
+		/*
+		 * General-purpose arithmetic and CPU control groups
+		 */
+	
+		// NEG
+		case 0x44: {
+			alu.neg();
+			break;
+		}
+
+		default:
+			handleUnsupportedOpCode(opCode);
+	
 		}
 	}
 
@@ -759,6 +773,10 @@ public class Z80 {
 
 	private int displace(final int addr, final int d) {
 		return addr + (byte) d;
+	}
+
+	private void handleUnsupportedOpCode(final int opCode) {
+		throw new IllegalArgumentException(String.format("OpCode 0x%x not supported", opCode));
 	}
 
 	public Memory getMemory() {
