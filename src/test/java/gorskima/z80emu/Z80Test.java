@@ -121,6 +121,24 @@ public class Z80Test {
 	}
 
 	@Test
+	public void test_LD_BC_A() {
+		reg.setRegister(A, 59);
+		reg.setRegister(BC, 13300);
+		mem.writeWord8(0, 0x02);
+		cpu.step();
+		assertThat(mem.readWord8(13300), is(59));
+	}
+
+	@Test
+	public void test_LD_DE_A() {
+		reg.setRegister(A, 17);
+		reg.setRegister(DE, 5000);
+		mem.writeWord8(0, 0x12);
+		cpu.step();
+		assertThat(mem.readWord8(5000), is(17));
+	}
+
+	@Test
 	public void test_LD_nn_A() {
 		reg.setRegister(A, 15);
 		mem.writeWord8(0, 0x32);

@@ -165,6 +165,22 @@ public class Z80 {
 			break;
 		}
 
+		// LD (BC),A
+		case 0x02: {
+			int addr = registers.getRegister(Register.BC);
+			int n = registers.getRegister(Register.A);
+			memory.writeWord8(addr, n);
+			break;
+		}
+
+		// LD (DE),A
+		case 0x12: {
+			int addr = registers.getRegister(Register.DE);
+			int n = registers.getRegister(Register.A);
+			memory.writeWord8(addr, n);
+			break;
+		}
+
 		// LD (nn),A
 		case 0x32: {
 			int addr = fetchWord16();
