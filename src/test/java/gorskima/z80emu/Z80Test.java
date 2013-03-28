@@ -94,7 +94,7 @@ public class Z80Test {
 	}
 
 	@Test
-	public void test_A_BC() {
+	public void test_LD_A_BC() {
 		reg.setRegister(BC, 2000);
 		mem.writeWord16(0, 0x0A); // LD A,(BC)
 		mem.writeWord8(2000, 33);
@@ -103,7 +103,7 @@ public class Z80Test {
 	}
 
 	@Test
-	public void test_A_DE() {
+	public void test_LD_A_DE() {
 		reg.setRegister(DE, 5000);
 		mem.writeWord16(0, 0x1A); // LD A,(DE)
 		mem.writeWord8(5000, 123);
@@ -112,7 +112,7 @@ public class Z80Test {
 	}
 
 	@Test
-	public void test_A_nn() {
+	public void test_LD_A_nn() {
 		mem.writeWord8(0, 0x3A);
 		mem.writeWord16(1, 25000);
 		mem.writeWord8(25000, 7);
