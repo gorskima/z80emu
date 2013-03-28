@@ -239,4 +239,12 @@ public class Z80Test {
 		assertThat(reg.getRegister(R), is(98));
 	}
 
+	@Test
+	public void test_LD_dd_nn() {
+		mem.writeWord8(0, 0x11);
+		mem.writeWord16(1, 12345);
+		cpu.step();
+		assertThat(reg.getRegister(DE), is(12345));
+	}
+
 }
