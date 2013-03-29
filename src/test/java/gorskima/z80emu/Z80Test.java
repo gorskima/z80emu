@@ -249,6 +249,15 @@ public class Z80Test {
 	}
 
 	@Test
+	public void test_LD_HL_nn() {
+		mem.writeWord8(0, 0x2A); // LD HL,(nn)
+		mem.writeWord16(1, 0x5577);
+		mem.writeWord16(0x5577, 0x1234);
+		cpu.step();
+		assertThat(reg.getRegister(HL), is(0x1234));
+	}
+
+	@Test
 	public void test_LD_dd__nn() { // TODO change name
 		mem.writeWord8(0, 0xED);
 		mem.writeWord8(1, 0x4B); // LD BC,(1000)
@@ -259,9 +268,18 @@ public class Z80Test {
 	}
 
 	@Test
+	public void test_LD_nn_HL() {
+		reg.setRegister(HL, 0x1520);
+		mem.writeWord8(0, 0x22); // LD (nn),HL
+		mem.writeWord16(1, 0x0040);
+		cpu.step();
+		assertThat(mem.readWord16(0x0040), is(0x1520));
+	}
+
+	@Test
 	public void test_LD_SP_HL() {
 		reg.setRegister(HL, 25000);
-		mem.writeWord8(0, 0xF9);
+		mem.writeWord8(0, 0xF9); // LD SP,HL
 		cpu.step();
 		assertThat(reg.getRegister(SP), is(25000));
 	}

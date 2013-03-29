@@ -214,6 +214,22 @@ public class Z80 {
 			break;
 		}
 
+		// LD HL,(nn)
+		case 0x2A: {
+			int addr = fetchWord16();
+			int nn = memory.readWord16(addr);
+			registers.setRegister(Register.HL, nn);
+			break;
+		}
+
+		// LD (nn),HL
+		case 0x22: {
+			int addr = fetchWord16();
+			int nn = registers.getRegister(Register.HL);
+			memory.writeWord16(addr, nn);
+			break;
+		}
+
 		// LD SP,HL
 		case 0xF9: {
 			int nn = registers.getRegister(Register.HL);
