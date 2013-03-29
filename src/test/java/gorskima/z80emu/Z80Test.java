@@ -266,4 +266,26 @@ public class Z80Test {
 		assertThat(reg.getRegister(SP), is(25000));
 	}
 
+	@Test
+	public void test_PUSH_qq() {
+		reg.setRegister(SP, 0xFFFF);
+		reg.setRegister(BC, 0x2277);
+		mem.writeWord8(0, 0xC5); // PUSH BC
+		cpu.step();
+		assertThat(reg.getRegister(SP), is(0xFFFD));
+		assertThat(mem.readWord8(0xFFFD), is(0x77));
+		assertThat(mem.readWord8(0xFFFE), is(0x22));
+	}
+
+	@Test
+	public void test_POP_qq() {
+		reg.setRegister(SP, 0xFFF0);
+		mem.writeWord8(0, 0xE1); // PUSH HL
+		mem.writeWord8(0xFFF0, 0x34);
+		mem.writeWord8(0xFFF1, 0x12);
+		cpu.step();
+		assertThat(reg.getRegister(HL), is(0x1234));
+		assertThat(reg.getRegister(SP), is(0xFFF2));
+	}
+
 }
