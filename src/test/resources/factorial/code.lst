@@ -1,0 +1,11 @@
+   1:			; implement factorial stuff here
+   2:	0000  76      	HALT
+   3:			
+**** code.z80 ****
+
+
+
+Statistics:
+
+     0	symbols
+     1	byte
