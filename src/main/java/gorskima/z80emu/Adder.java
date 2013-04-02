@@ -1,29 +1,23 @@
 package gorskima.z80emu;
 
+
 public class Adder {
 
-	private boolean[] carries = new boolean[8];
+	private final static int SIZE = 8;
+	private boolean[] carries = new boolean[SIZE];
 
-	// TODO refactor
 	public int add(final int op1, final int op2, final int carryIn) {
 		int result = 0;
 		int carry = carryIn;
 
-		for (int i = 0; i < 8; i++) {
-			int a = (op1 >> i) & 0x01;
-			int b = (op2 >> i) & 0x01;
-			int sum = a + b + carry;
-
-			result >>= 1;
-			if ((sum & 0x01) == 1) {
-				result |= 0x80;
-			} else {
-				result &= 0x7F;
-			}
-			carry = ((sum >> 1) & 0x01);
-			carries[i] = (carry == 1);
+		for (int shift = 0; shift < SIZE; shift++) {
+			int a = (op1 >> shift) & 1;
+			int b = (op2 >> shift) & 1;
+			int r = a ^ b ^ carry;
+			result = r == 1 ? result | 1 << shift : result & ~(1 << shift);
+			carry = (a & b) | (carry & (a ^ b));
+			carries[shift] = carry == 1;
 		}
-
 		return result;
 	}
 
