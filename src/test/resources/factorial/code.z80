@@ -1,3 +1,15 @@
 ; implement factorial stuff here
+LD SP,65535
+
+LD BC,120
+PUSH BC
+CALL factorial
 HALT
+
+factorial:
+; testing stack frame here
+LD IX,0
+ADD IX,SP
+LD A,(IX+2)
+RET
 

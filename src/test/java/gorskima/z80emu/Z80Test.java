@@ -306,4 +306,14 @@ public class Z80Test {
 		assertThat(reg.getRegister(SP), is(0xFFF2));
 	}
 
+	@Test
+	public void test_ADD_IX_pp() {
+		reg.setRegister(IX, 1000);
+		reg.setRegister(SP, 500);
+		mem.writeWord8(0, 0xDD); // ADD IX,SP
+		mem.writeWord8(1, 0x39);
+		cpu.step();
+		assertThat(reg.getRegister(IX), is(1500));
+	}
+
 }

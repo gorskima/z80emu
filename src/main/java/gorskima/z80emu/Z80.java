@@ -611,6 +611,22 @@ public class Z80 {
 			break;
 		}
 
+		/*
+		 * 16-bit arithmetic group
+		 */
+		case 0x09:
+		case 0x19:
+		case 0x29:
+		case 0x39: {
+			// TODO move to decoder, as well as other similar logic
+			int destRegCode = (opCode >> 4) & 0x03;
+			Register register = decoder.decode(RegisterType.pp, destRegCode);
+			int nn = registers.getRegister(register);
+			// TODO move addition to ALU / 16-bit adder
+			registers.setRegister(Register.IX, registers.getRegister(Register.IX) + nn);
+			break;
+		}
+
 		default:
 			handleUnsupportedOpCode(opCode);
 
@@ -734,7 +750,7 @@ public class Z80 {
 		/*
 		 * 16-bit load group
 		 */
-	
+
 		// LD dd,(nn)
 		case 0x4B:
 		case 0x5B:
@@ -747,7 +763,7 @@ public class Z80 {
 			registers.setRegister(destReg, value);
 			break;
 		}
-	
+
 		/*
 		 * General-purpose arithmetic and CPU control groups
 		 */

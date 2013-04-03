@@ -1,11 +1,29 @@
    1:			; implement factorial stuff here
-   2:	0000  76      	HALT
+   2:	0000  31FFFF  	LD SP,65535
    3:			
+   4:	0003  017800  	LD BC,120
+   5:	0006  C5      	PUSH BC
+   6:	0007  CD0B00  	CALL factorial
+   7:	000A  76      	HALT
+   8:			
+   9:	000B          	factorial:
+  10:			; testing stack frame here
+  11:	000B  DD210000	LD IX,0
+  12:	000F  DD39    	ADD IX,SP
+  13:	0011  DD7E02  	LD A,(IX+2)
+  14:	0014  C9      	RET
+  15:			
 **** code.z80 ****
 
 
 
 Statistics:
 
-     0	symbols
-     1	byte
+     1	symbol
+    21	bytes
+
+
+
+Symbol Table:
+
+factorial          b     
