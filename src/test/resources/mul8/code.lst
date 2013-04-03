@@ -1,0 +1,46 @@
+   1:	0000  31FFFF  		LD SP,65535
+   2:			
+   3:	0003  110700  		LD DE, 7
+   4:	0006  D5      		PUSH DE
+   5:	0007  110900  		LD  DE, 9
+   6:	000A  D5      		PUSH DE
+   7:	000B  CD0F00  		CALL mul8
+   8:			
+   9:	000E  76      		HALT
+  10:			
+  11:	000F          	mul8:
+  12:	000F  DD210000		LD IX,0
+  13:	0013  DD39    		ADD IX,SP
+  14:	0015  3E00    		LD A,0
+  15:	0017  DD4602  		LD B,(IX+2)
+  16:	001A  DD4E04  		LD C,(IX+4)
+  17:			
+  18:				; handle C == 0
+  19:				;CP C
+  20:				;JP Z,done
+  21:			
+  22:	001D          	loop:
+  23:	001D  80      		ADD A,B
+  24:	001E  0D      		DEC C
+  25:	001F  CA2500  		JP Z,done
+  26:	0022  C31D00  		JP loop
+  27:			
+  28:	0025          	done:
+  29:	0025  C9      		RET
+  30:			
+  31:			
+**** code.z80 ****
+
+
+
+Statistics:
+
+     3	symbols
+    38	bytes
+
+
+
+Symbol Table:
+
+done              25     mul8               f     
+loop              1d     

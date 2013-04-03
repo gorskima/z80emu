@@ -1,0 +1,31 @@
+	LD SP,65535
+
+	LD DE, 7
+	PUSH DE
+	LD  DE, 9
+	PUSH DE
+	CALL mul8
+
+	HALT
+
+mul8:
+	LD IX,0
+	ADD IX,SP
+	LD A,0
+	LD B,(IX+2)
+	LD C,(IX+4)
+
+	; handle C == 0
+	;CP C
+	;JP Z,done
+
+loop:
+	ADD A,B
+	DEC C
+	JP Z,done
+	JP loop
+
+done:
+	RET
+
+

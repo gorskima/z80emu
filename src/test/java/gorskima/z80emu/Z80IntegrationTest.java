@@ -40,4 +40,10 @@ public class Z80IntegrationTest {
 		assertThat(cpu.getRegisters().getRegister(Register.A), is(120));
 	}
 
+	@Test
+	public void testMul8withStackFrame() {
+		Z80 cpu = run("mul8/code.bin");
+		assertThat(cpu.getRegisters().getRegister(Register.A), is(63));
+	}
+
 }
