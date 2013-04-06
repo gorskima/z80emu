@@ -9,12 +9,12 @@ factorial:
 	LD C,A
 	LD A,1
 
-	INC C ;trick
+	INC C		; TODO find better way to test counter
 	DEC C
 
 .factorial_loop
 	JP Z,factorial_done
-	LD B,A		;save for later
+	LD B,A		; save for later
 	LD A,C
 	PUSH BC
 	CALL mul8
@@ -30,13 +30,16 @@ mul8:
 	LD C,A
 	LD A,0
 
-.loop
+	INC C 		; TODO find better way to test counter
+	DEC C
+
+.mul8_loop
+	JP Z,mul8_done
 	ADD A,B
 	DEC C
-	JP Z,done
-	JP loop
+	JP mul8_loop
 
-.done
+.mul8_done
 	RET
 
 

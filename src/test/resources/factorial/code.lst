@@ -9,12 +9,12 @@
    9:	0009  4F      		LD C,A
   10:	000A  3E01    		LD A,1
   11:			
-  12:	000C  0C      		INC C ;trick
+  12:	000C  0C      		INC C		; TODO find better way to test counter
   13:	000D  0D      		DEC C
   14:			
   15:	000E          	.factorial_loop
   16:	000E  CA1C00  		JP Z,factorial_done
-  17:	0011  47      		LD B,A		;save for later
+  17:	0011  47      		LD B,A		; save for later
   18:	0012  79      		LD A,C
   19:	0013  C5      		PUSH BC
   20:	0014  CD1D00  		CALL mul8
@@ -30,16 +30,19 @@
   30:	001D  4F      		LD C,A
   31:	001E  3E00    		LD A,0
   32:			
-  33:			.loop
-  34:	0020  80      		ADD A,B
-  35:	0021  0D      		DEC C
-  36:	0022  CA2800  		JP Z,done
-  37:	0025  C32000  		JP loop
-  38:			
-  39:	0028          	.done
-  40:	0028  C9      		RET
+  33:	0020  0C      		INC C 		; TODO find better way to test counter
+  34:	0021  0D      		DEC C
+  35:			
+  36:	0022          	.mul8_loop
+  37:	0022  CA2A00  		JP Z,mul8_done
+  38:	0025  80      		ADD A,B
+  39:	0026  0D      		DEC C
+  40:	0027  C32200  		JP mul8_loop
   41:			
-  42:			
+  42:	002A          	.mul8_done
+  43:	002A  C9      		RET
+  44:			
+  45:			
 **** code.z80 ****
 
 
@@ -47,12 +50,12 @@
 Statistics:
 
      6	symbols
-    41	bytes
+    43	bytes
 
 
 
 Symbol Table:
 
-done              28     factorial_loop     e     
-factorial          9     loop              20     
-factorial_done    1c     mul8              1d     
+factorial          9     mul8              1d     
+factorial_done    1c     mul8_done         2a     
+factorial_loop     e     mul8_loop         22     
