@@ -1,29 +1,58 @@
-   1:			; implement factorial stuff here
-   2:	0000  31FFFF  	LD SP,65535
-   3:			
-   4:	0003  017800  	LD BC,120
-   5:	0006  C5      	PUSH BC
-   6:	0007  CD0B00  	CALL factorial
-   7:	000A  76      	HALT
-   8:			
-   9:	000B          	factorial:
-  10:			; testing stack frame here
-  11:	000B  DD210000	LD IX,0
-  12:	000F  DD39    	ADD IX,SP
-  13:	0011  DD7E02  	LD A,(IX+2)
-  14:	0014  C9      	RET
-  15:			
+   1:	0000  31FFFF  		LD SP,65535
+   2:				
+   3:	0003  3E05    		LD A,5
+   4:	0005  CD0900  		CALL factorial
+   5:				
+   6:	0008  76      		HALT
+   7:			
+   8:	0009          	factorial:
+   9:	0009  4F      		LD C,A
+  10:	000A  3E01    		LD A,1
+  11:			
+  12:	000C  0C      		INC C ;trick
+  13:	000D  0D      		DEC C
+  14:			
+  15:	000E          	.factorial_loop
+  16:	000E  CA1C00  		JP Z,factorial_done
+  17:	0011  47      		LD B,A		;save for later
+  18:	0012  79      		LD A,C
+  19:	0013  C5      		PUSH BC
+  20:	0014  CD1D00  		CALL mul8
+  21:	0017  C1      		POP BC
+  22:	0018  0D      		DEC C
+  23:			
+  24:	0019  C30E00  		JP factorial_loop
+  25:			
+  26:	001C          	.factorial_done
+  27:	001C  C9      		RET
+  28:			
+  29:	001D          	mul8:
+  30:	001D  4F      		LD C,A
+  31:	001E  3E00    		LD A,0
+  32:			
+  33:			.loop
+  34:	0020  80      		ADD A,B
+  35:	0021  0D      		DEC C
+  36:	0022  CA2800  		JP Z,done
+  37:	0025  C32000  		JP loop
+  38:			
+  39:	0028          	.done
+  40:	0028  C9      		RET
+  41:			
+  42:			
 **** code.z80 ****
 
 
 
 Statistics:
 
-     1	symbol
-    21	bytes
+     6	symbols
+    41	bytes
 
 
 
 Symbol Table:
 
-factorial          b     
+done              28     factorial_loop     e     
+factorial          9     loop              20     
+factorial_done    1c     mul8              1d     

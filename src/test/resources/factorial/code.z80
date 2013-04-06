@@ -1,15 +1,42 @@
-; implement factorial stuff here
-LD SP,65535
-
-LD BC,120
-PUSH BC
-CALL factorial
-HALT
+	LD SP,65535
+	
+	LD A,5
+	CALL factorial
+	
+	HALT
 
 factorial:
-; testing stack frame here
-LD IX,0
-ADD IX,SP
-LD A,(IX+2)
-RET
+	LD C,A
+	LD A,1
+
+	INC C ;trick
+	DEC C
+
+.factorial_loop
+	JP Z,factorial_done
+	LD B,A		;save for later
+	LD A,C
+	PUSH BC
+	CALL mul8
+	POP BC
+	DEC C
+
+	JP factorial_loop
+
+.factorial_done
+	RET
+
+mul8:
+	LD C,A
+	LD A,0
+
+.loop
+	ADD A,B
+	DEC C
+	JP Z,done
+	JP loop
+
+.done
+	RET
+
 
