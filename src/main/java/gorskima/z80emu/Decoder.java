@@ -66,23 +66,19 @@ public class Decoder {
 		flagMap.put(7, Flag.S);
 	}
 
-	@Deprecated
-	public Register decode(final RegisterType type, final int code) {
-		return map.get(type).get(code);
-	}
-
-	public Flag decodeFlag(final int code) {
-		return flagMap.get(code);
-	}
-
-	public Register decodeReg(final RegisterType type, final int opCode) {
+	public Register decode(final RegisterType type, final int opCode) {
 		if (type == RegisterType.r) {
-			int regCode = extractHigherRegisterCode(opCode);
-			return decode(type, regCode);
-		} else {
-			int regCode = extractDoubleRegisterCode(opCode);
-			return decode(type, regCode);
+			throw new IllegalArgumentException("Call decodeUpperR or decodeLowerR");
 		}
+		return decode2(type, extractDoubleRegisterCode(opCode));
+	}
+
+	public Register decodeLowerR(final int opCode) {
+		return decode2(RegisterType.r, opCode & 0x07);
+	}
+
+	private Register decode2(final RegisterType type, final int code) {
+		return map.get(type).get(code);
 	}
 
 	private int extractHigherRegisterCode(final int opCode) {
@@ -93,7 +89,11 @@ public class Decoder {
 		return (opCode >> 4) & 0x03;
 	}
 
-	public Register decodeSecondR(final int opCode) {
-		return decode(RegisterType.r, opCode & 0x07);
+	public Flag decodeFlag(final int code) {
+		return flagMap.get(code);
+	}
+
+	public Register decodeUpperR(final int opCode) {
+		return decode2(RegisterType.r, extractHigherRegisterCode(opCode));
 	}
 }

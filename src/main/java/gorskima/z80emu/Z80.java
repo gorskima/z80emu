@@ -84,10 +84,8 @@ public class Z80 {
 		case 0x6B:
 		case 0x6C:
 		case 0x6D: {
-			int destRegCode = extractHigherRegisterCode(opCode);
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register destReg = decoder.decode(RegisterType.r, destRegCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register destReg = decoder.decodeUpperR(opCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			registers.setRegister(destReg, n);
 			break;
@@ -102,8 +100,7 @@ public class Z80 {
 		case 0x26:
 		case 0x2E: {
 			int n = fetchWord8();
-			int destRegCode = extractHigherRegisterCode(opCode);
-			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
 		}
@@ -118,8 +115,7 @@ public class Z80 {
 		case 0x6E: {
 			int hl = registers.getRegister(Register.HL);
 			int n = memory.readWord8(hl);
-			int destRegCode = extractHigherRegisterCode(opCode);
-			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
 		}
@@ -132,8 +128,7 @@ public class Z80 {
 		case 0x74:
 		case 0x75:
 		case 0x77: {
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			int hl = registers.getRegister(Register.HL);
 			memory.writeWord8(hl, n);
@@ -206,9 +201,7 @@ public class Z80 {
 		case 0x21:
 		case 0x31: {
 			int nn = fetchWord16();
-
-			int destRegCode = (opCode >> 4) & 0x03;
-			Register destReg = decoder.decode(RegisterType.dd, destRegCode);
+			Register destReg = decoder.decode(RegisterType.dd, opCode);
 			registers.setRegister(destReg, nn);
 			break;
 		}
@@ -241,8 +234,7 @@ public class Z80 {
 		case 0xD5:
 		case 0xE5:
 		case 0xF5: {
-			int srcRegCode = (opCode >> 4) & 0x03;
-			Register srcReg = decoder.decode(RegisterType.qq, srcRegCode);
+			Register srcReg = decoder.decode(RegisterType.qq, opCode);
 			int value = registers.getRegister(srcReg);
 			int sp = registers.getRegister(Register.SP);
 			sp -= 2;
@@ -256,8 +248,7 @@ public class Z80 {
 		case 0xD1:
 		case 0xE1:
 		case 0xF1: {
-			int dstRegCode = (opCode >> 4) & 0x03;
-			Register dstReg = decoder.decode(RegisterType.qq, dstRegCode);
+			Register dstReg = decoder.decode(RegisterType.qq, opCode);
 			int sp = registers.getRegister(Register.SP);
 			int value = memory.readWord16(sp);
 			registers.setRegister(dstReg, value);
@@ -277,8 +268,7 @@ public class Z80 {
 		case 0x84:
 		case 0x85:
 		case 0x87: {
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			alu.add(n);
 			break;
@@ -319,8 +309,7 @@ public class Z80 {
 		case 0x94:
 		case 0x95:
 		case 0x97: {
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			alu.sub(n);
 			break;
@@ -356,8 +345,7 @@ public class Z80 {
 		case 0xB5:
 		case 0xB6:
 		case 0xB7: {
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			alu.or(n);
 			break;
@@ -392,8 +380,7 @@ public class Z80 {
 		case 0x24:
 		case 0x2C:
 		case 0x3C: {
-			int regCode = extractHigherRegisterCode(opCode);
-			Register r = decoder.decode(RegisterType.r, regCode);
+			Register r = decoder.decodeUpperR(opCode);
 			alu.inc(r);
 			break;
 		}
@@ -415,8 +402,7 @@ public class Z80 {
 		case 0x25:
 		case 0x2D:
 		case 0x3D: {
-			int regCode = (opCode >> 3) & 0x07;
-			Register r = decoder.decode(RegisterType.r, regCode);
+			Register r = decoder.decodeUpperR(opCode);
 			alu.dec(r);
 			break;
 		}
@@ -540,8 +526,7 @@ public class Z80 {
 			int d = fetchWord8();
 			int ix = registers.getRegister(Register.IX);
 			int n = memory.readWord8(ix + d);
-			int destRegCode = extractHigherRegisterCode(opCode);
-			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
 		}
@@ -556,8 +541,7 @@ public class Z80 {
 		case 0x77: {
 			int d = fetchWord8();
 			int ix = registers.getRegister(Register.IX);
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			int addr = displace(ix, d);
 			memory.writeWord8(addr, n);
@@ -605,9 +589,7 @@ public class Z80 {
 		case 0x19:
 		case 0x29:
 		case 0x39: {
-			// TODO move to decoder, as well as other similar logic
-			int destRegCode = (opCode >> 4) & 0x03;
-			Register register = decoder.decode(RegisterType.pp, destRegCode);
+			Register register = decoder.decode(RegisterType.pp, opCode);
 			int nn = registers.getRegister(register);
 			// TODO move addition to ALU / 16-bit adder
 			registers.setRegister(Register.IX, registers.getRegister(Register.IX) + nn);
@@ -644,8 +626,7 @@ public class Z80 {
 			int d = fetchWord8();
 			int iy = registers.getRegister(Register.IY);
 			int n = memory.readWord8(iy + d);
-			int destRegCode = extractHigherRegisterCode(opCode);
-			Register destReg = decoder.decode(RegisterType.r, destRegCode);
+			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
 		}
@@ -660,8 +641,7 @@ public class Z80 {
 		case 0x77: {
 			int d = fetchWord8();
 			int iy = registers.getRegister(Register.IY);
-			int srcRegCode = extractLowerRegisterCode(opCode);
-			Register srcReg = decoder.decode(RegisterType.r, srcRegCode);
+			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
 			int addr = displace(iy, d);
 			memory.writeWord8(addr, n);
@@ -745,8 +725,7 @@ public class Z80 {
 		case 0x7B: {
 			int nn = fetchWord16();
 			int value = memory.readWord16(nn);
-			int destRegCode = (opCode >> 4) & 0x03; // TODO refactor
-			Register destReg = decoder.decode(RegisterType.dd, destRegCode);
+			Register destReg = decoder.decode(RegisterType.dd, opCode);
 			registers.setRegister(destReg, value);
 			break;
 		}
@@ -780,14 +759,6 @@ public class Z80 {
 		registers.incPC();
 		registers.incPC();
 		return word;
-	}
-
-	private int extractLowerRegisterCode(final int opCode) {
-		return opCode & 0x07;
-	}
-
-	private int extractHigherRegisterCode(final int opCode) {
-		return (opCode >> 3) & 0x07;
 	}
 
 	private int displace(final int addr, final int d) {
