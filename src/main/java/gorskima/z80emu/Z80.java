@@ -2,8 +2,6 @@ package gorskima.z80emu;
 
 import gorskima.z80emu.Decoder.RegisterType;
 
-import java.util.Scanner;
-
 public class Z80 {
 
 	private final Registers registers;
@@ -465,15 +463,9 @@ public class Z80 {
 			int flagCode = (opCode >> 3) & 0x07;
 			Flag flag = decoder.decodeFlag(flagCode);
 			int desiredValue = flagCode & 0x01;
-
-			// if (reg.getFlag(flag) == desiredValue) {
-			// reg.setRegister(Register.PC, nn);
-			// }
-
 			if (registers.testFlag(flag) && (desiredValue != 0 ? true : false)) {
 				registers.setRegister(Register.PC, nn);
 			}
-
 			break;
 		}
 
@@ -507,24 +499,12 @@ public class Z80 {
 
 		// IN A,(n)
 		case 0xDB: {
-			int n = fetchWord8();
-			// tmp hack
-			if (n == 0) {
-				System.out.print("In: ");
-				int value = new Scanner(System.in).nextInt();
-				registers.setRegister(Register.A, value);
-			}
-			break;
+			throw new UnsupportedOperationException("IN op is not yet implemented");
 		}
 
 		// OUT (n),A
 		case 0xD3: {
-			int n = fetchWord8();
-			// tmp hack
-			if (n == 1) {
-				System.out.println("Out: " + registers.getRegister(Register.A));
-			}
-			break;
+			throw new UnsupportedOperationException("OUT op is not yet implemented");
 		}
 
 		default:
