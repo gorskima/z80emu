@@ -37,7 +37,17 @@ public class DecoderTest {
 		assertThat(decoder.decodeReg(r, 0x20), is(H));
 		assertThat(decoder.decodeReg(r, 0x28), is(L));
 		assertThat(decoder.decodeReg(r, 0x38), is(A));
-		// TODO add r'
+	}
+	
+	@Test
+	public void testDecodingSecondR() {
+		assertThat(decoder.decodeSecondR(0x00), is(B));
+		assertThat(decoder.decodeSecondR(0x01), is(C));
+		assertThat(decoder.decodeSecondR(0x02), is(D));
+		assertThat(decoder.decodeSecondR(0x03), is(E));
+		assertThat(decoder.decodeSecondR(0x04), is(H));
+		assertThat(decoder.decodeSecondR(0x05), is(L));
+		assertThat(decoder.decodeSecondR(0x07), is(A));
 	}
 	
 	@Test

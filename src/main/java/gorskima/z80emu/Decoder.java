@@ -66,6 +66,7 @@ public class Decoder {
 		flagMap.put(7, Flag.S);
 	}
 
+	@Deprecated
 	public Register decode(final RegisterType type, final int code) {
 		return map.get(type).get(code);
 	}
@@ -92,4 +93,7 @@ public class Decoder {
 		return (opCode >> 4) & 0x03;
 	}
 
+	public Register decodeSecondR(final int opCode) {
+		return decode(RegisterType.r, opCode & 0x07);
+	}
 }
