@@ -147,6 +147,7 @@ public class Z80 {
 			int n = fetchWord8();
 			int addr = registers.getRegister(Register.HL);
 			memory.writeWord8(addr, n);
+			break;
 		}
 
 		// LD A,(BC)
@@ -576,6 +577,7 @@ public class Z80 {
 			int n = registers.getRegister(srcReg);
 			int addr = displace(ix, d);
 			memory.writeWord8(addr, n);
+			break;
 		}
 
 		// LD (IX+d),n
