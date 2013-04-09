@@ -74,4 +74,22 @@ public class Decoder {
 		return flagMap.get(code);
 	}
 
+	public Register decodeReg(final RegisterType type, final int opCode) {
+		if (type == RegisterType.r) {
+			int regCode = extractHigherRegisterCode(opCode);
+			return decode(type, regCode);
+		} else {
+			int regCode = extractDoubleRegisterCode(opCode);
+			return decode(type, regCode);
+		}
+	}
+
+	private int extractHigherRegisterCode(final int opCode) {
+		return (opCode >> 3) & 0x07;
+	}
+
+	private int extractDoubleRegisterCode(final int opCode) {
+		return (opCode >> 4) & 0x03;
+	}
+
 }
