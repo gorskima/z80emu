@@ -432,18 +432,22 @@ public class Z80 {
 		}
 
 		// NOP
-		case 0x00:
+		case 0x00: {
+			// do nothing :)
 			break;
+		}
 
 		// HALT
-		case 0x76:
+		case 0x76: {
 			halt = true;
+			break;
+		}
 
-			/*
-			 * Jump group
-			 */
+		/*
+		 * Jump group
+		 */
 
-			// JP nn
+		// JP nn
 		case 0xC3: {
 			int nn = fetchWord16();
 			registers.setRegister(Register.PC, nn);
@@ -567,6 +571,7 @@ public class Z80 {
 			int ix = registers.getRegister(Register.IX);
 			int addr = displace(ix, d);
 			memory.writeWord8(addr, n);
+			break;
 		}
 
 		/*
