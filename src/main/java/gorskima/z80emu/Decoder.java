@@ -96,4 +96,19 @@ public class Decoder {
 	public Register decodeUpperR(final int opCode) {
 		return decode2(RegisterType.r, extractHigherRegisterCode(opCode));
 	}
+
+	public Condition decodeCondition(final int opCode) {
+		int flagCode = extractFlagCode(opCode);
+		boolean expectedValue = extractFlagExpectedValue(opCode);
+		return new Condition(flagMap.get(flagCode), expectedValue);
+	}
+
+	private boolean extractFlagExpectedValue(final int opCode) {
+		return (opCode & 0x08) > 0;
+	}
+
+	private int extractFlagCode(final int opCode) {
+		return extractHigherRegisterCode(opCode);
+	}
+
 }

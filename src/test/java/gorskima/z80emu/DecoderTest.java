@@ -89,4 +89,22 @@ public class DecoderTest {
 		assertThat(decoder.decode(rr, 0x30), is(SP));
 	}
 
+	@Test
+	public void testDecodingCC() {
+		assertCondition(decoder.decodeCondition(0x00), Flag.Z, false);
+		assertCondition(decoder.decodeCondition(0x08), Flag.Z, true);
+		assertCondition(decoder.decodeCondition(0x10), Flag.C, false);
+		assertCondition(decoder.decodeCondition(0x18), Flag.C, true);
+		assertCondition(decoder.decodeCondition(0x20), Flag.PV, false);
+		assertCondition(decoder.decodeCondition(0x28), Flag.PV, true);
+		assertCondition(decoder.decodeCondition(0x30), Flag.S, false);
+		assertCondition(decoder.decodeCondition(0x38), Flag.S, true);
+	}
+
+	// TODO why not writing hamcrest matcher?
+	private void assertCondition(final Condition decodeCondition, final Flag flag, final boolean expectedValue) {
+		assertThat(decodeCondition.getFlag(), is(flag));
+		assertThat(decodeCondition.getExpectedValue(), is(expectedValue));
+	}
+
 }

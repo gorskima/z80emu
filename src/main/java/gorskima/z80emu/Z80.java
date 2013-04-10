@@ -292,8 +292,7 @@ public class Z80 {
 		// ADC A,n
 		case 0xCE: {
 			int n = fetchWord8();
-			boolean carry = registers.testFlag(Flag.C);
-			if (carry) {
+			if (registers.testFlag(Flag.C)) {
 				alu.adc(n);
 			} else {
 				alu.add(n);
@@ -450,10 +449,8 @@ public class Z80 {
 		case 0xF2:
 		case 0xFA: {
 			int nn = fetchWord16();
-			int flagCode = (opCode >> 3) & 0x07;
-			Flag flag = decoder.decodeFlag(flagCode);
-			int desiredValue = flagCode & 0x01;
-			if (registers.testFlag(flag) && (desiredValue != 0 ? true : false)) {
+			Condition cond = decoder.decodeCondition(opCode);
+			if (registers.testFlag(cond.getFlag()) == cond.getExpectedValue()) {
 				registers.setRegister(Register.PC, nn);
 			}
 			break;
