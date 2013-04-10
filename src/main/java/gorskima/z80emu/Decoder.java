@@ -57,27 +57,27 @@ public class Decoder {
 
 		flagMap = new HashMap<Integer, Flag>();
 		flagMap.put(0, Flag.Z);
-		flagMap.put(1, Flag.Z);
-		flagMap.put(2, Flag.C);
-		flagMap.put(3, Flag.C);
-		flagMap.put(4, Flag.PV);
-		flagMap.put(5, Flag.PV);
-		flagMap.put(6, Flag.S);
-		flagMap.put(7, Flag.S);
+		flagMap.put(1, Flag.C);
+		flagMap.put(2, Flag.PV);
+		flagMap.put(3, Flag.S);
 	}
 
-	public Register decode(final RegisterType type, final int opCode) {
+	public Register decodeRegister(final RegisterType type, final int opCode) {
 		if (type == RegisterType.r) {
 			throw new IllegalArgumentException("Call decodeUpperR or decodeLowerR");
 		}
-		return decode2(type, extractDoubleRegisterCode(opCode));
+		return decode(type, extractDoubleRegisterCode(opCode));
+	}
+
+	public Register decodeUpperR(final int opCode) {
+		return decode(RegisterType.r, extractHigherRegisterCode(opCode));
 	}
 
 	public Register decodeLowerR(final int opCode) {
-		return decode2(RegisterType.r, opCode & 0x07);
+		return decode(RegisterType.r, opCode & 0x07);
 	}
 
-	private Register decode2(final RegisterType type, final int code) {
+	private Register decode(final RegisterType type, final int code) {
 		return map.get(type).get(code);
 	}
 
@@ -89,26 +89,16 @@ public class Decoder {
 		return (opCode >> 4) & 0x03;
 	}
 
-	public Flag decodeFlag(final int code) {
-		return flagMap.get(code);
-	}
-
-	public Register decodeUpperR(final int opCode) {
-		return decode2(RegisterType.r, extractHigherRegisterCode(opCode));
-	}
-
 	public Condition decodeCondition(final int opCode) {
-		int flagCode = extractFlagCode(opCode);
-		boolean expectedValue = extractFlagExpectedValue(opCode);
-		return new Condition(flagMap.get(flagCode), expectedValue);
-	}
-
-	private boolean extractFlagExpectedValue(final int opCode) {
-		return (opCode & 0x08) > 0;
+		return new Condition(flagMap.get(extractFlagCode(opCode)), extractExpectedFlagValue(opCode));
 	}
 
 	private int extractFlagCode(final int opCode) {
-		return extractHigherRegisterCode(opCode);
+		return (opCode >> 4) & 0x03;
+	}
+
+	private boolean extractExpectedFlagValue(final int opCode) {
+		return (opCode & 0x08) > 0;
 	}
 
 }

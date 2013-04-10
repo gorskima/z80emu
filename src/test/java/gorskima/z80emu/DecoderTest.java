@@ -51,42 +51,42 @@ public class DecoderTest {
 	
 	@Test
 	public void testDecodingDD() {
-		assertThat(decoder.decode(dd, 0x00), is(BC));
-		assertThat(decoder.decode(dd, 0x10), is(DE));
-		assertThat(decoder.decode(dd, 0x20), is(HL));
-		assertThat(decoder.decode(dd, 0x30), is(SP));
+		assertThat(decoder.decodeRegister(dd, 0x00), is(BC));
+		assertThat(decoder.decodeRegister(dd, 0x10), is(DE));
+		assertThat(decoder.decodeRegister(dd, 0x20), is(HL));
+		assertThat(decoder.decodeRegister(dd, 0x30), is(SP));
 	}
 
 	@Test
 	public void testDecodingSS() {
-		assertThat(decoder.decode(dd, 0x00), is(BC));
-		assertThat(decoder.decode(dd, 0x10), is(DE));
-		assertThat(decoder.decode(dd, 0x20), is(HL));
-		assertThat(decoder.decode(dd, 0x30), is(SP));
+		assertThat(decoder.decodeRegister(dd, 0x00), is(BC));
+		assertThat(decoder.decodeRegister(dd, 0x10), is(DE));
+		assertThat(decoder.decodeRegister(dd, 0x20), is(HL));
+		assertThat(decoder.decodeRegister(dd, 0x30), is(SP));
 	}
 
 	@Test
 	public void testDecodingQQ() {
-		assertThat(decoder.decode(qq, 0x00), is(BC));
-		assertThat(decoder.decode(qq, 0x10), is(DE));
-		assertThat(decoder.decode(qq, 0x20), is(HL));
-		assertThat(decoder.decode(qq, 0x30), is(AF));
+		assertThat(decoder.decodeRegister(qq, 0x00), is(BC));
+		assertThat(decoder.decodeRegister(qq, 0x10), is(DE));
+		assertThat(decoder.decodeRegister(qq, 0x20), is(HL));
+		assertThat(decoder.decodeRegister(qq, 0x30), is(AF));
 	}
 
 	@Test
 	public void testDecodingPP() {
-		assertThat(decoder.decode(pp, 0x00), is(BC));
-		assertThat(decoder.decode(pp, 0x10), is(DE));
-		assertThat(decoder.decode(pp, 0x20), is(IX));
-		assertThat(decoder.decode(pp, 0x30), is(SP));
+		assertThat(decoder.decodeRegister(pp, 0x00), is(BC));
+		assertThat(decoder.decodeRegister(pp, 0x10), is(DE));
+		assertThat(decoder.decodeRegister(pp, 0x20), is(IX));
+		assertThat(decoder.decodeRegister(pp, 0x30), is(SP));
 	}
 
 	@Test
 	public void testDecodingRR() {
-		assertThat(decoder.decode(rr, 0x00), is(BC));
-		assertThat(decoder.decode(rr, 0x10), is(DE));
-		assertThat(decoder.decode(rr, 0x20), is(IY));
-		assertThat(decoder.decode(rr, 0x30), is(SP));
+		assertThat(decoder.decodeRegister(rr, 0x00), is(BC));
+		assertThat(decoder.decodeRegister(rr, 0x10), is(DE));
+		assertThat(decoder.decodeRegister(rr, 0x20), is(IY));
+		assertThat(decoder.decodeRegister(rr, 0x30), is(SP));
 	}
 
 	@Test

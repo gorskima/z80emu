@@ -201,7 +201,7 @@ public class Z80 {
 		case 0x21:
 		case 0x31: {
 			int nn = fetchWord16();
-			Register destReg = decoder.decode(RegisterType.dd, opCode);
+			Register destReg = decoder.decodeRegister(RegisterType.dd, opCode);
 			registers.setRegister(destReg, nn);
 			break;
 		}
@@ -234,7 +234,7 @@ public class Z80 {
 		case 0xD5:
 		case 0xE5:
 		case 0xF5: {
-			Register srcReg = decoder.decode(RegisterType.qq, opCode);
+			Register srcReg = decoder.decodeRegister(RegisterType.qq, opCode);
 			int value = registers.getRegister(srcReg);
 			int sp = registers.getRegister(Register.SP);
 			sp -= 2;
@@ -248,7 +248,7 @@ public class Z80 {
 		case 0xD1:
 		case 0xE1:
 		case 0xF1: {
-			Register dstReg = decoder.decode(RegisterType.qq, opCode);
+			Register dstReg = decoder.decodeRegister(RegisterType.qq, opCode);
 			int sp = registers.getRegister(Register.SP);
 			int value = memory.readWord16(sp);
 			registers.setRegister(dstReg, value);
@@ -586,7 +586,7 @@ public class Z80 {
 		case 0x19:
 		case 0x29:
 		case 0x39: {
-			Register register = decoder.decode(RegisterType.pp, opCode);
+			Register register = decoder.decodeRegister(RegisterType.pp, opCode);
 			int nn = registers.getRegister(register);
 			// TODO move addition to ALU / 16-bit adder
 			registers.setRegister(Register.IX, registers.getRegister(Register.IX) + nn);
@@ -722,7 +722,7 @@ public class Z80 {
 		case 0x7B: {
 			int nn = fetchWord16();
 			int value = memory.readWord16(nn);
-			Register destReg = decoder.decode(RegisterType.dd, opCode);
+			Register destReg = decoder.decodeRegister(RegisterType.dd, opCode);
 			registers.setRegister(destReg, value);
 			break;
 		}
