@@ -1,16 +1,15 @@
 package gorskima.z80emu;
 
+import static gorskima.z80emu.Register.F;
+import static gorskima.z80emu.Register.PC;
+
 public class Registers {
 
 	private static final int REG_OFFSET = 8;
 
-	private int[] mem;
-	private int exSwitch = 0;
-	private int exxSwitch = 0;
-
-	public Registers() {
-		mem = new int[26];
-	}
+	private int[] mem = new int[26];
+	private boolean exSwitch = false;
+	private boolean exxSwitch = false;
 
 	public int getRegister(final Register r) {
 		if (r.size == 1) {
@@ -54,35 +53,31 @@ public class Registers {
 	}
 
 	public void incPC() {
-		int pc = getRegister16(Register.PC);
-		pc = (pc + 1) & 0xFFFF;
-		setRegister16(Register.PC, pc);
+		int pc = getRegister16(PC);
+		int newPc = (pc + 1) & 0xFFFF;
+		setRegister16(PC, newPc);
 	}
 
 	public boolean testFlag(final Flag flag) {
-		return ((getRegister(Register.F) & flag.mask) > 0);
+		return (getRegister(F) & flag.mask) > 0;
 	}
 
 	public void setFlag(final Flag flag, final boolean value) {
-		int f = getRegister8(Register.F);
+		int f = getRegister8(F);
 
 		if (value) {
-			setRegister8(Register.F, f | flag.mask);
+			setRegister8(F, f | flag.mask);
 		} else {
-			setRegister8(Register.F, f & ~flag.mask);
+			setRegister8(F, f & ~flag.mask);
 		}
 	}
 
 	private int calculateAddr(final Register r) {
-		int regSwitch = 0;
-
-		// TODO clean up
 		switch (r) {
 		case A:
 		case F:
 		case AF:
-			regSwitch = exSwitch;
-			break;
+			return r.value + (exSwitch ? 1 : 0) * REG_OFFSET;
 		case B:
 		case C:
 		case D:
@@ -92,11 +87,10 @@ public class Registers {
 		case BC:
 		case DE:
 		case HL:
-			regSwitch = exxSwitch;
-			break;
+			return r.value + (exxSwitch ? 1 : 0) * REG_OFFSET;
+		default:
+			return r.value;
 		}
-
-		return r.value + regSwitch * REG_OFFSET;
 	}
 
 }
