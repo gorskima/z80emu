@@ -20,12 +20,34 @@ public class Adder16 {
 		return result;
 	}
 
+	public int sub(final int op1, final int op2, final int carryIn) {
+		int invertedOp2 = invertByte(op2);
+		int invertedCarryIn = invertBit(carryIn);
+		return add(op1, invertedOp2, invertedCarryIn);
+	}
+
+	private int invertByte(final int value) {
+		return ~value & 0xFFFF;
+	}
+
+	private int invertBit(final int value) {
+		return ~value & 0x01;
+	}
+
 	public boolean isCarry() {
 		return carries[15];
 	}
 
 	public boolean isHalfCarry() {
 		return carries[11];
+	}
+
+	public boolean isBorrow() {
+		return !isCarry();
+	}
+
+	public boolean isHalfBorrow() {
+		return !isHalfCarry();
 	}
 
 	public boolean isOverflow() {
