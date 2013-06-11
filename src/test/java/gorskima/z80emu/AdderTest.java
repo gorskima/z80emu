@@ -7,92 +7,92 @@ import org.junit.Test;
 public class AdderTest {
 
 	@Test
-	public void testAdd() {
-		addResultAndCarry(0, 0, 0, 0, 0);
-		addResultAndCarry(1, 0, 0, 1, 0);
-		addResultAndCarry(0, 1, 0, 1, 0);
-		addResultAndCarry(1, 0, 1, 2, 0);
-		addResultAndCarry(0, 1, 1, 2, 0);
+	public void testAddWithCarry() {
+		addWithCarry(0, 0, 0, 0, 0);
+		addWithCarry(1, 0, 0, 1, 0);
+		addWithCarry(0, 1, 0, 1, 0);
+		addWithCarry(1, 0, 1, 2, 0);
+		addWithCarry(0, 1, 1, 2, 0);
 
-		addResultAndCarry(255, 0, 0, 255, 0);
-		addResultAndCarry(0, 255, 0, 255, 0);
-		addResultAndCarry(255, 0, 1, 0, 1);
-		addResultAndCarry(0, 255, 1, 0, 1);
-		addResultAndCarry(255, 1, 0, 0, 1);
+		addWithCarry(255, 0, 0, 255, 0);
+		addWithCarry(0, 255, 0, 255, 0);
+		addWithCarry(255, 0, 1, 0, 1);
+		addWithCarry(0, 255, 1, 0, 1);
+		addWithCarry(255, 1, 0, 0, 1);
 
-		addResultAndCarry(128, 128, 0, 0, 1);
-		addResultAndCarry(128, 128, 1, 1, 1);
-		addResultAndCarry(127, 127, 0, 254, 0);
+		addWithCarry(128, 128, 0, 0, 1);
+		addWithCarry(128, 128, 1, 1, 1);
+		addWithCarry(127, 127, 0, 254, 0);
 
-		addResultAndCarry(255, 255, 0, 254, 1);
-		addResultAndCarry(255, 255, 1, 255, 1);
+		addWithCarry(255, 255, 0, 254, 1);
+		addWithCarry(255, 255, 1, 255, 1);
 	}
 
 	@Test
-	public void testSub() {
-		sub(0, 0, 0, 0, 0);
-		sub(1, 0, 0, 1, 0);
-		sub(1, 1, 0, 0, 0);
-		sub(1, 0, 1, 0, 0);
+	public void testSubWithBorrow() {
+		subWithBorrow(0, 0, 0, 0, 0);
+		subWithBorrow(1, 0, 0, 1, 0);
+		subWithBorrow(1, 1, 0, 0, 0);
+		subWithBorrow(1, 0, 1, 0, 0);
 
-		sub(255, 254, 1, 0, 0);
-		sub(255, 255, 0, 0, 0);
-		sub(255, 255, 1, 255, 1);
+		subWithBorrow(255, 254, 1, 0, 0);
+		subWithBorrow(255, 255, 0, 0, 0);
+		subWithBorrow(255, 255, 1, 255, 1);
 
-		sub(0, 0, 1, 255, 1);
-		sub(0, 1, 0, 255, 1);
-		sub(0, 1, 1, 254, 1);
+		subWithBorrow(0, 0, 1, 255, 1);
+		subWithBorrow(0, 1, 0, 255, 1);
+		subWithBorrow(0, 1, 1, 254, 1);
 
-		sub(0, 255, 0, 1, 1);
-		sub(0, 255, 1, 0, 1);
+		subWithBorrow(0, 255, 0, 1, 1);
+		subWithBorrow(0, 255, 1, 0, 1);
 
-		sub(128, 128, 0, 0, 0);
-		sub(128, 128, 1, 255, 1);
+		subWithBorrow(128, 128, 0, 0, 0);
+		subWithBorrow(128, 128, 1, 255, 1);
 	}
 
 	@Test
-	public void testAddOverflow() {
-		addOver(1, 1, 0, 0);
-		addOver(1, -1, 0, 0);
-		addOver(127, 1, 0, 1);
-		addOver(-128, 1, 0, 0);
-		addOver(-128, -1, 0, 1);
+	public void testAddWithOverflow() {
+		addWithOverflow(1, 1, 0, 0);
+		addWithOverflow(1, -1, 0, 0);
+		addWithOverflow(127, 1, 0, 1);
+		addWithOverflow(-128, 1, 0, 0);
+		addWithOverflow(-128, -1, 0, 1);
 	}
 
 	@Test
-	public void testSubOverflow() {
-		subOverflow(0, 1, 0, 0);
-		subOverflow(-128, 1, 0, 1);
-		subOverflow(127, -1, 0, 1);
+	public void testSubWithOverflow() {
+		subWithOverflow(0, 1, 0, 0);
+		subWithOverflow(-128, 1, 0, 1);
+		subWithOverflow(127, -1, 0, 1);
 	}
 
 	@Test
-	public void testAddHalfCarry() {
-		addHalfCarry(0, 0, 0, 0);
-		addHalfCarry(7, 7, 0, 0);
-		addHalfCarry(7, 8, 0, 0);
-		addHalfCarry(8, 8, 0, 1);
-		addHalfCarry(10, 10, 0, 1);
-		addHalfCarry(15, 15, 0, 1);
-		addHalfCarry(16, 15, 0, 0);
-		addHalfCarry(16, 16, 0, 0);
-		addHalfCarry(15, 14, 1, 1);
-		addHalfCarry(14, 15, 1, 1);
-		addHalfCarry(15, 1, 1, 1);
-		addHalfCarry(7, 7, 1, 0);
-		addHalfCarry(7, 8, 1, 1);
-		addHalfCarry(8, 7, 1, 1);
+	public void testAddWithHalfCarry() {
+		addWithHalfCarry(0, 0, 0, 0);
+		addWithHalfCarry(7, 7, 0, 0);
+		addWithHalfCarry(7, 8, 0, 0);
+		addWithHalfCarry(8, 8, 0, 1);
+		addWithHalfCarry(10, 10, 0, 1);
+		addWithHalfCarry(15, 15, 0, 1);
+		addWithHalfCarry(16, 15, 0, 0);
+		addWithHalfCarry(16, 16, 0, 0);
+		addWithHalfCarry(15, 14, 1, 1);
+		addWithHalfCarry(14, 15, 1, 1);
+		addWithHalfCarry(15, 1, 1, 1);
+		addWithHalfCarry(7, 7, 1, 0);
+		addWithHalfCarry(7, 8, 1, 1);
+		addWithHalfCarry(8, 7, 1, 1);
 	}
 
 	@Test
-	public void testSubHalfBorrow() {
-		subHalfCarry(0, 0, 0, 0);
-		subHalfCarry(16, 0, 0, 0);
-		subHalfCarry(16, 1, 0, 1);
-		subHalfCarry(0, 1, 0, 1);
+	public void testSubWithHalfBorrow() {
+		subWithHalfCarry(0, 0, 0, 0);
+		subWithHalfCarry(16, 0, 0, 0);
+		subWithHalfCarry(16, 1, 0, 1);
+		subWithHalfCarry(0, 1, 0, 1);
 	}
 
-	private void addResultAndCarry(final int op1, final int op2, final int carryIn,
+	private void addWithCarry(final int op1, final int op2, final int carryIn,
 			final int expectedResult, final int expectedCarry) {
 		Adder adder = new Adder();
 		int actualResult = adder.add(op1, op2, carryIn);
@@ -101,7 +101,7 @@ public class AdderTest {
 		assertEquals("Add carry mismatch", expectedCarry, actualCarry);
 	}
 
-	private void sub(final int op1, final int op2, final int carryIn, final int expectedResult,
+	private void subWithBorrow(final int op1, final int op2, final int carryIn, final int expectedResult,
 			final int expectedCarry) {
 		Adder adder = new Adder();
 		int actualResult = adder.sub(op1, op2, carryIn);
@@ -110,21 +110,21 @@ public class AdderTest {
 		assertEquals("Sub carry mismatch", expectedCarry, actualCarry);
 	}
 
-	private void addOver(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
+	private void addWithOverflow(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
 		Adder adder = new Adder();
 		adder.add(op1, op2, carryIn);
 		int actualOverflow = adder.isOverflow() ? 1 : 0;
 		assertEquals("Add overflow mismatch", expectedOverflow, actualOverflow);
 	}
 
-	private void subOverflow(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
+	private void subWithOverflow(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
 		Adder adder = new Adder();
 		adder.sub(op1, op2, carryIn);
 		int actualOverflow = adder.isOverflow() ? 1 : 0;
 		assertEquals("Sub overflow mismatch", expectedOverflow, actualOverflow);
 	}
 
-	private void addHalfCarry(final int op1, final int op2, final int carryIn,
+	private void addWithHalfCarry(final int op1, final int op2, final int carryIn,
 			final int expectedHalfCarry) {
 		Adder adder = new Adder();
 		adder.add(op1, op2, carryIn);
@@ -133,7 +133,7 @@ public class AdderTest {
 				actualHalfCarry);
 	}
 
-	private void subHalfCarry(final int op1, final int op2, final int carryIn,
+	private void subWithHalfCarry(final int op1, final int op2, final int carryIn,
 			final int expectedHalfCarry) {
 		Adder adder = new Adder();
 		adder.sub(op1, op2, carryIn);
