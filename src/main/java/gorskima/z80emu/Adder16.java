@@ -28,4 +28,8 @@ public class Adder16 {
 		return carries[11];
 	}
 
+	public boolean isOverflow() {
+		return carries[15] ^ carries[14];
+	}
+
 }
