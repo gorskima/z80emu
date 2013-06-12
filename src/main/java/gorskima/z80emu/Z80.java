@@ -766,6 +766,17 @@ public class Z80 {
 			alu.adc16(value);
 			break;
 		}
+		
+		// SBC HL,ss
+		case 0x42:
+		case 0x52:
+		case 0x62:
+		case 0x72: {
+			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
+			int value = registers.getRegister(reg);
+			alu.sbc16(value);
+			break;
+		}
 
 		default:
 			handleUnsupportedOpCode(opCode);

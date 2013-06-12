@@ -210,4 +210,20 @@ public class ALU {
 		registers.setFlag(Flag.C, true);
 	}
 
+	public void sbc16(final int op2) {
+		int op1 = registers.getRegister(Register.HL);
+		int carry = registers.testFlag(Flag.C) ? 1 : 0;
+
+		Adder adder = Adder.newAdder16();
+		int result = adder.sub(op1, op2, carry);
+		registers.setRegister(Register.HL, result);
+		
+		registers.setFlag(Flag.S, ((result >> 15) & 0x01) == 1);
+		registers.setFlag(Flag.Z, isZero(result));
+		registers.setFlag(Flag.H, adder.isHalfBorrow());
+		registers.setFlag(Flag.PV, adder.isOverflow());
+		registers.setFlag(Flag.N, true);
+		registers.setFlag(Flag.C, adder.isBorrow());
+	}
+
 }

@@ -324,6 +324,17 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(HL), is(50001));
 	}
+	
+	@Test
+	public void test_SBC_HL_ss() {
+		reg.setRegister(HL, 10000);
+		reg.setRegister(SP, 10000);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xED);
+		mem.writeWord8(1, 0x72);
+		cpu.step();
+		assertThat(reg.getRegister(HL), is(65535));
+	}
 
 	@Test
 	public void test_ADD_IX_pp() {

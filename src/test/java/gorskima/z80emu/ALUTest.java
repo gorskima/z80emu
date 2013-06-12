@@ -206,5 +206,19 @@ public class ALUTest {
 		assertThat(reg.testFlag(Flag.N), is(false));
 		assertThat(reg.testFlag(Flag.C), is(true));
 	}
+	
+	@Test
+	public void testSbc16() {
+		reg.setRegister(HL, 40000);
+		reg.setFlag(Flag.C, true);
+		alu.sbc16(20000);
+		assertThat(reg.getRegister(HL), is(19999));
+		assertThat(reg.testFlag(Flag.S), is(false));
+		assertThat(reg.testFlag(Flag.Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(Flag.PV), is(true));
+		assertThat(reg.testFlag(Flag.N), is(true));
+		assertThat(reg.testFlag(Flag.C), is(false));
+	}
 
 }
