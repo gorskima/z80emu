@@ -28,6 +28,8 @@ public class Z80 {
 	}
 
 	private void stepUnprefixed(final int opCode) {
+		// Unprefixed, single-byte opCodes, binary compatible with i8080
+		
 		switch (opCode) {
 
 		/*
@@ -255,6 +257,10 @@ public class Z80 {
 			registers.setRegister(Register.SP, sp + 2);
 			break;
 		}
+		
+		/*
+		 * Exchange, Block Transfer, and Search Group
+		 */
 
 		/*
 		 * 8-bit arithmetic group
@@ -288,6 +294,8 @@ public class Z80 {
 			alu.add(n);
 			break;
 		}
+		
+		// TODO implement ADC A,r
 
 		// ADC A,n
 		case 0xCE: {
@@ -299,7 +307,9 @@ public class Z80 {
 			}
 			break;
 		}
-
+		
+		// TODO implement ADC A,(HL)
+		
 		// SUB r
 		case 0x90:
 		case 0x91:
@@ -320,6 +330,10 @@ public class Z80 {
 			alu.sub(n);
 			break;
 		}
+		
+		// TODO implement SUB (HL)
+		
+		// TODO implement SBC A,r
 
 		// SBC A,n
 		case 0xDE: {
@@ -327,6 +341,10 @@ public class Z80 {
 			alu.sbc(n);
 			break;
 		}
+		
+		// TODO implement SBC A,(HL)
+		
+		// TODO implement AND r
 
 		// AND n
 		case 0xE6: {
@@ -334,6 +352,8 @@ public class Z80 {
 			alu.and(n);
 			break;
 		}
+		
+		// TODO implement AND (HL)
 
 		// OR r
 		case 0xB0:
@@ -356,6 +376,10 @@ public class Z80 {
 			alu.or(n);
 			break;
 		}
+		
+		// TODO implement OR (HL)
+		
+		// TODO implement XOR r
 
 		// XOR n
 		case 0xEE: {
@@ -363,13 +387,19 @@ public class Z80 {
 			alu.xor(n);
 			break;
 		}
+		
+		// TODO implement XOR (HL)
 
+		// TODO implement CP r
+		
 		// CP n
 		case 0xFE: {
 			int n = fetchWord8();
 			alu.cp(n);
 			break;
 		}
+		
+		// TODO implement CP (HL)
 
 		// INC r
 		case 0x04:
@@ -384,7 +414,7 @@ public class Z80 {
 			break;
 		}
 
-		// INC (HL)
+		// INC (HL) // TODO fix
 		case 0x34: {
 			int hl = registers.getRegister(Register.HL);
 			int word = memory.readWord8(hl);
@@ -405,6 +435,8 @@ public class Z80 {
 			alu.dec(r);
 			break;
 		}
+		
+		// TODO implement DEC (HL)
 
 		/*
 		 * General purpose arithmetic and CPU control
@@ -415,6 +447,10 @@ public class Z80 {
 			alu.cpl();
 			break;
 		}
+		
+		// TODO implement CCF
+		
+		// TODO implement SCF
 
 		// NOP
 		case 0x00: {
@@ -427,6 +463,10 @@ public class Z80 {
 			halt = true;
 			break;
 		}
+		
+		// TODO implement DI
+		
+		// TODO implement EI
 		
 		/*
 		 * 16-Bit Arithmetic Group
@@ -442,6 +482,22 @@ public class Z80 {
 			alu.add16(value);
 			break;
 		}
+		
+		// TODO implement INC ss
+		
+		// TODO implement DEC ss
+		
+		/*
+		 * Rotate and Shift Grouop
+		 */
+		
+		// TODO implement all
+		
+		/*
+		 * Bit Set, Reset, and Test Group
+		 */
+		
+		// TODO implement all
 
 		/*
 		 * Jump group
@@ -470,6 +526,22 @@ public class Z80 {
 			}
 			break;
 		}
+		
+		// TODO implement JR e
+		
+		// consider implementing the four below in a generic way
+		
+		// TODO implement JR C,e
+		
+		// TODO implement JR NC,e
+		
+		// TODO implement JR Z,e
+		
+		// TODO implement JR NZ,e
+		
+		// TODO implement JP (HL)
+		
+		// TODO implement DJNZ
 
 		/*
 		 * Call and return group
@@ -485,6 +557,8 @@ public class Z80 {
 			registers.setRegister(Register.PC, addr);
 			break;
 		}
+		
+		// TODO implement CALL cc,nn
 
 		// RET
 		case 0xC9: {
@@ -494,17 +568,23 @@ public class Z80 {
 			registers.setRegister(Register.PC, addr);
 			break;
 		}
+		
+		// TODO implement RET cc
+		
+		// TODO implement RST p
 
 		/*
 		 * Input and output group
 		 */
 
-		// IN A,(n)
+		// IN A,(n) // TODO implement
 		case 0xDB: {
 			throw new UnsupportedOperationException("IN op is not yet implemented");
 		}
+		
+		// TODO implement IN r,(C)
 
-		// OUT (n),A
+		// OUT (n),A // TODO implement
 		case 0xD3: {
 			throw new UnsupportedOperationException("OUT op is not yet implemented");
 		}
