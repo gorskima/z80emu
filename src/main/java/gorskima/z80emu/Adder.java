@@ -1,16 +1,30 @@
 package gorskima.z80emu;
 
-
 public class Adder {
 
-	private final static int SIZE = 8;
-	private boolean[] carries = new boolean[SIZE];
+	private final int size;
+	private final int mask;
+	private boolean[] carries;
+
+	private Adder(final int size) {
+		this.size = size;
+		this.mask = 0xFFFFFFFF >>> (31 - size);
+		this.carries = new boolean[size];
+	}
+
+	public static Adder newAdder8() {
+		return new Adder(8);
+	}
+
+	public static Adder newAdder16() {
+		return new Adder(16);
+	}
 
 	public int add(final int op1, final int op2, final int carryIn) {
 		int result = 0;
 		int carry = carryIn;
 
-		for (int shift = 0; shift < SIZE; shift++) {
+		for (int shift = 0; shift < size; shift++) {
 			int a = (op1 >> shift) & 1;
 			int b = (op2 >> shift) & 1;
 			int r = a ^ b ^ carry;
@@ -26,9 +40,9 @@ public class Adder {
 		int invertedCarryIn = invertBit(carryIn);
 		return add(op1, invertedOp2, invertedCarryIn);
 	}
-	
+
 	private int invertByte(final int value) {
-		return ~value & 0xFF;
+		return ~value & mask;
 	}
 
 	private int invertBit(final int value) {
@@ -36,23 +50,23 @@ public class Adder {
 	}
 
 	public boolean isCarry() {
-		return carries[7];
+		return carries[size - 1];
 	}
-	
+
 	public boolean isBorrow() {
 		return !isCarry();
 	}
-	
+
 	public boolean isHalfCarry() {
-		return carries[3];
+		return carries[size - 5];
 	}
-	
+
 	public boolean isHalfBorrow() {
 		return !isHalfCarry();
 	}
-	
+
 	public boolean isOverflow() {
-		return carries[7] ^ carries[6];
+		return carries[size - 1] ^ carries[size - 2];
 	}
 
 }

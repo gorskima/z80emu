@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class AdderTest {
+public class Adder8Test {
 
 	@Test
 	public void testAddWithCarry() {
@@ -94,7 +94,7 @@ public class AdderTest {
 
 	private void addWithCarry(final int op1, final int op2, final int carryIn,
 			final int expectedResult, final int expectedCarry) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int actualResult = adder.add(op1, op2, carryIn);
 		int actualCarry = adder.isCarry() ? 1 : 0;
 		assertEquals("Add result mismatch", expectedResult, actualResult);
@@ -103,7 +103,7 @@ public class AdderTest {
 
 	private void subWithBorrow(final int op1, final int op2, final int carryIn, final int expectedResult,
 			final int expectedCarry) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int actualResult = adder.sub(op1, op2, carryIn);
 		int actualCarry = adder.isBorrow() ? 1 : 0;
 		assertEquals("Sub result mismatch", expectedResult, actualResult);
@@ -111,14 +111,14 @@ public class AdderTest {
 	}
 
 	private void addWithOverflow(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		adder.add(op1, op2, carryIn);
 		int actualOverflow = adder.isOverflow() ? 1 : 0;
 		assertEquals("Add overflow mismatch", expectedOverflow, actualOverflow);
 	}
 
 	private void subWithOverflow(final int op1, final int op2, final int carryIn, final int expectedOverflow) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		adder.sub(op1, op2, carryIn);
 		int actualOverflow = adder.isOverflow() ? 1 : 0;
 		assertEquals("Sub overflow mismatch", expectedOverflow, actualOverflow);
@@ -126,7 +126,7 @@ public class AdderTest {
 
 	private void addWithHalfCarry(final int op1, final int op2, final int carryIn,
 			final int expectedHalfCarry) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		adder.add(op1, op2, carryIn);
 		int actualHalfCarry = adder.isHalfCarry() ? 1 : 0;
 		assertEquals("Add half-carry mismatch", expectedHalfCarry,
@@ -135,7 +135,7 @@ public class AdderTest {
 
 	private void subWithHalfCarry(final int op1, final int op2, final int carryIn,
 			final int expectedHalfCarry) {
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		adder.sub(op1, op2, carryIn);
 		int actualHalfCarry = adder.isHalfBorrow() ? 1 : 0;
 		assertEquals("Add half-carry mismatch", expectedHalfCarry,

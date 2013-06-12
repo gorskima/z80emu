@@ -16,7 +16,7 @@ public class ALU {
 	public void add(final int op2) {
 		int op1 = registers.getRegister(Register.A);
 
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.add(op1, op2, 0);
 		registers.setRegister(Register.A, result);
 
@@ -27,7 +27,7 @@ public class ALU {
 		int op1 = registers.getRegister(Register.A);
 		int carry = registers.testFlag(Flag.C) ? 1 : 0;
 
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.add(op1, op2, carry);
 		registers.setRegister(Register.A, result);
 
@@ -37,7 +37,7 @@ public class ALU {
 	public void sub(final int op2) {
 		int op1 = registers.getRegister(Register.A);
 
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, op2, 0);
 		registers.setRegister(Register.A, result);
 
@@ -48,7 +48,7 @@ public class ALU {
 		int op1 = registers.getRegister(Register.A);
 		int carry = registers.testFlag(Flag.C) ? 1 : 0;
 
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, op2, carry);
 		registers.setRegister(Register.A, result);
 
@@ -58,7 +58,7 @@ public class ALU {
 	public void inc(final Register r) {
 		int op1 = registers.getRegister(r);
 	
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.add(op1, 1, 0);
 		registers.setRegister(r, result);
 	
@@ -68,7 +68,7 @@ public class ALU {
 	public void dec(final Register r) {
 		int op1 = registers.getRegister(r);
 	
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, 1, 0);
 		registers.setRegister(r, result);
 	
@@ -78,7 +78,7 @@ public class ALU {
 	public void cp(final int op2) {
 		int op1 = registers.getRegister(Register.A);
 	
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, op2, 0);
 	
 		setSubstractionFlags(adder, result);
@@ -87,7 +87,7 @@ public class ALU {
 	public void neg() {
 		int op2 = registers.getRegister(Register.A);
 	
-		Adder adder = new Adder();
+		Adder adder = Adder.newAdder8();
 		int result = adder.sub(0, op2, 0);
 		registers.setRegister(Register.A, result);
 	

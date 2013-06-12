@@ -61,7 +61,7 @@ public class Adder16Test {
 	private void addWithCarry(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedCarry) {
 
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.add(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isCarry(), is(expectedCarry == 1));
@@ -70,7 +70,7 @@ public class Adder16Test {
 	private void subWithBorrow(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedBorrow) {
 
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.sub(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isBorrow(), is(expectedBorrow == 1));
@@ -79,7 +79,7 @@ public class Adder16Test {
 	private void addWithHalfCarry(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedCarry) {
 
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.add(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isHalfCarry(), is(expectedCarry == 1));
@@ -88,7 +88,7 @@ public class Adder16Test {
 	private void subWithHalfBorrow(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedCarry) {
 		
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.sub(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isHalfBorrow(), is(expectedCarry == 1));
@@ -97,7 +97,7 @@ public class Adder16Test {
 	private void addWithOverflow(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedOverflow) {
 
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.add(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isOverflow(), is(expectedOverflow == 1));
@@ -106,7 +106,7 @@ public class Adder16Test {
 	private void subWithOverflow(final int op1, final int op2, final int carry, final int expectedResult,
 			final int expectedOverflow) {
 
-		Adder16 adder = new Adder16();
+		Adder adder = Adder.newAdder16();
 		int result = adder.sub(op1, op2, carry);
 		assertThat(result, is(expectedResult));
 		assertThat(adder.isOverflow(), is(expectedOverflow == 1));
