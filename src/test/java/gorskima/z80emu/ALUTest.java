@@ -5,6 +5,7 @@ import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
 import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
+import static gorskima.z80emu.Register.HL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -27,7 +28,7 @@ public class ALUTest {
 		assertThat(reg.testFlag(N), is(false));
 		assertThat(reg.testFlag(Flag.C), is(false));
 	}
-	
+
 	@Test
 	public void testAdc() {
 		reg.setRegister(A, 75);
@@ -180,6 +181,30 @@ public class ALUTest {
 		assertThat(reg.getRegister(A), is(252));
 		assertThat(reg.testFlag(Flag.H), is(true));
 		assertThat(reg.testFlag(N), is(true));
+	}
+
+	@Test
+	public void testAdd16() {
+		reg.setRegister(HL, 40000);
+		alu.add16(30000);
+		assertThat(reg.getRegister(HL), is(4464));
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(N), is(false));
+	}
+
+	@Test
+	public void testAdc16() {
+		reg.setRegister(HL, 30000);
+		reg.setFlag(Flag.C, true);
+		alu.adc16(35538);
+		assertThat(reg.getRegister(HL), is(3));
+		assertThat(reg.testFlag(Flag.S), is(false));
+		assertThat(reg.testFlag(Flag.Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(Flag.PV), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+		assertThat(reg.testFlag(Flag.C), is(true));
 	}
 
 }
