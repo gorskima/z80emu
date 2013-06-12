@@ -427,6 +427,21 @@ public class Z80 {
 			halt = true;
 			break;
 		}
+		
+		/*
+		 * 16-Bit Arithmetic Group
+		 */
+		
+		// ADD HL,ss
+		case 0x09:
+		case 0x19:
+		case 0x29:
+		case 0x39: {
+			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
+			int value = registers.getRegister(reg);
+			alu.add16(value);
+			break;
+		}
 
 		/*
 		 * Jump group
@@ -734,6 +749,21 @@ public class Z80 {
 		// NEG
 		case 0x44: {
 			alu.neg();
+			break;
+		}
+		
+		/*
+		 * 16-Bit Arithmetic Group
+		 */
+		
+		// ADC HL,ss
+		case 0x4A:
+		case 0x5A:
+		case 0x6A:
+		case 0x7A: {
+			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
+			int value = registers.getRegister(reg);
+			alu.adc16(value);
 			break;
 		}
 
