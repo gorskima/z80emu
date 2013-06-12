@@ -207,7 +207,7 @@ public class ALU {
 		registers.setFlag(Flag.H, adder.isHalfCarry());
 		registers.setFlag(Flag.PV, adder.isOverflow());
 		registers.setFlag(Flag.N, false);
-		registers.setFlag(Flag.C, true);
+		registers.setFlag(Flag.C, adder.isCarry());
 	}
 
 	public void sbc16(final int op2) {
