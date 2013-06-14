@@ -517,7 +517,7 @@ public class Z80 {
 		case 0xFA: {
 			int nn = fetchWord16();
 			Condition cond = decoder.decodeCondition(opCode);
-			if (registers.testFlag(cond.getFlag()) == cond.getExpectedValue()) {
+			if (isConditionMet(cond)) {
 				registers.setRegister(Register.PC, nn);
 			}
 			break;
@@ -878,6 +878,10 @@ public class Z80 {
 
 	private int displace(final int addr, final int d) {
 		return addr + (byte) d;
+	}
+
+	private boolean isConditionMet(Condition cond) {
+		return registers.testFlag(cond.getFlag()) == cond.getExpectedValue();
 	}
 
 	private void handleUnsupportedOpCode(final int opCode) {
