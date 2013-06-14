@@ -173,14 +173,13 @@ public class ALU {
 		return op == 0;
 	}
 
-	private boolean getParity(final int op) {
-		int c = 0;
-		for (int i = 0; i < 8; i++) {
-			if (((op >> i) & 0x01) == 1) {
-				c++;
-			}
+	private boolean getParity(int op) {
+		boolean parity = true;
+		while (op != 0) {
+			parity = !parity;
+			op = op & (op - 1);
 		}
-		return (c % 2) == 0;
+		return parity;
 	}
 
 	public void add16(final int op2) {
