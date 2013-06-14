@@ -70,8 +70,8 @@ public class Z80Test {
 		reg.setRegister(IY, 75);
 		mem.writeWord8(0, 0xFD); // LD L,(IY+7)
 		mem.writeWord8(1, 0x6E);
-		mem.writeWord8(2, 8);
-		mem.writeWord8(83, 37);
+		mem.writeWord8(2, 251);
+		mem.writeWord8(70, 37);
 		cpu.step();
 		assertThat(reg.getRegister(L), is(37));
 	}

@@ -714,7 +714,8 @@ public class Z80 {
 		case 0x7E: {
 			int d = fetchWord8();
 			int iy = registers.getRegister(Register.IY);
-			int n = memory.readWord8(iy + d);
+			int addr = displace(iy, d);
+			int n = memory.readWord8(addr);
 			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
