@@ -77,7 +77,7 @@ public class Registers {
 		case A:
 		case F:
 		case AF:
-			return r.value + (exSwitch ? 1 : 0) * REG_OFFSET;
+			return r.offset + (exSwitch ? 1 : 0) * REG_OFFSET;
 		case B:
 		case C:
 		case D:
@@ -87,9 +87,9 @@ public class Registers {
 		case BC:
 		case DE:
 		case HL:
-			return r.value + (exxSwitch ? 1 : 0) * REG_OFFSET;
+			return r.offset + (exxSwitch ? 1 : 0) * REG_OFFSET;
 		default:
-			return r.value;
+			return r.offset;
 		}
 	}
 

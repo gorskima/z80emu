@@ -11,6 +11,7 @@ public class Z80 {
 
 	private boolean halt = false;
 	
+	// TODO add new constructor without registers
 	public Z80(final Registers registers, final Memory memory) {
 		this.registers = registers;
 		this.memory = memory;
@@ -115,8 +116,8 @@ public class Z80 {
 		case 0x5E:
 		case 0x66:
 		case 0x6E: {
-			int hl = registers.getRegister(Register.HL);
-			int n = memory.readWord8(hl);
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
 			Register destReg = decoder.decodeUpperR(opCode);
 			registers.setRegister(destReg, n);
 			break;
@@ -132,8 +133,8 @@ public class Z80 {
 		case 0x77: {
 			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
-			int hl = registers.getRegister(Register.HL);
-			memory.writeWord8(hl, n);
+			int addr = registers.getRegister(Register.HL);
+			memory.writeWord8(addr, n);
 			break;
 		}
 
@@ -239,9 +240,8 @@ public class Z80 {
 			Register srcReg = decoder.decodeRegister(RegisterType.qq, opCode);
 			int value = registers.getRegister(srcReg);
 			int sp = registers.getRegister(Register.SP);
-			sp -= 2;
-			memory.writeWord16(sp, value);
-			registers.setRegister(Register.SP, sp);
+			memory.writeWord16(sp - 2, value);
+			registers.setRegister(Register.SP, sp - 2);
 			break;
 		}
 
@@ -300,11 +300,7 @@ public class Z80 {
 		// ADC A,n
 		case 0xCE: {
 			int n = fetchWord8();
-			if (registers.testFlag(Flag.C)) {
-				alu.adc(n);
-			} else {
-				alu.add(n);
-			}
+			alu.adc(n);
 			break;
 		}
 		
@@ -417,9 +413,9 @@ public class Z80 {
 		// INC (HL) // TODO fix
 		case 0x34: {
 			int hl = registers.getRegister(Register.HL);
-			int word = memory.readWord8(hl);
+			int value = memory.readWord8(hl);
 			// word = alu.inc(word);
-			memory.writeWord8(hl, word);
+			memory.writeWord8(hl, value);
 			break;
 		}
 
@@ -757,12 +753,11 @@ public class Z80 {
 	}
 
 	private void stepPrefixedWithED() {
-		int opCode;
 		/*
 		 * (nn) operations?
 		 */
 	
-		opCode = fetchWord8();
+		int opCode = fetchWord8();
 	
 		switch (opCode) {
 		
