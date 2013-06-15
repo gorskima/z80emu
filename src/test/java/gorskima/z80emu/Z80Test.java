@@ -319,7 +319,7 @@ public class Z80Test {
 		reg.setRegister(BC, 30000);
 		reg.setRegister(HL, 20000);
 		reg.setFlag(Flag.C, true);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // ADD HL,BC
 		mem.writeWord8(1, 0x4A);
 		cpu.step();
 		assertThat(reg.getRegister(HL), is(50001));
@@ -330,7 +330,7 @@ public class Z80Test {
 		reg.setRegister(HL, 10000);
 		reg.setRegister(SP, 10000);
 		reg.setFlag(Flag.C, true);
-		mem.writeWord8(0, 0xED);
+		mem.writeWord8(0, 0xED); // SBC HL,BC
 		mem.writeWord8(1, 0x72);
 		cpu.step();
 		assertThat(reg.getRegister(HL), is(65535));
