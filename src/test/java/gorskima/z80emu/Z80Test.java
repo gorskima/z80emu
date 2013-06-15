@@ -366,5 +366,15 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(A), is(255));
 	}
+	
+	@Test
+	public void test_SUB_HL() {
+		reg.setRegister(A, 100);
+		reg.setRegister(HL, 500);
+		mem.writeWord8(0, 0x96); // SUB (HL)
+		mem.writeWord8(500, 77);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(23));
+	}
 
 }

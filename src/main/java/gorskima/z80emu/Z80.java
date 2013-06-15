@@ -347,7 +347,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement SUB (HL)
+		// SUB (HL)
+		case 0x96: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.sub(n);
+			break;
+		}
 		
 		// TODO implement SBC A,r
 
