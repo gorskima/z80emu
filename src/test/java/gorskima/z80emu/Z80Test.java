@@ -345,5 +345,15 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(IX), is(1500));
 	}
+	
+	@Test
+	public void test_ADC_A_r() {
+		reg.setRegister(A, 50);
+		reg.setRegister(E, 20);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0x8B); // ADC A,E
+		cpu.step();
+		assertThat(reg.getRegister(A), is(71));
+	}
 
 }

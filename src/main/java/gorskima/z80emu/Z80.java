@@ -37,7 +37,7 @@ public class Z80 {
 		 * 8-bit load group
 		 */
 
-		// LD r,r
+		// LD r,r'
 		case 0x7F: // LD A,r
 		case 0x78:
 		case 0x79:
@@ -297,7 +297,19 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement ADC A,r
+		// ADC A,r
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8F: {
+			Register srcReg = decoder.decodeLowerR(opCode);
+			int n = registers.getRegister(srcReg);
+			alu.adc(n);
+			break;
+		}
 
 		// ADC A,n
 		case 0xCE: {
