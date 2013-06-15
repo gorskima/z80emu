@@ -261,6 +261,8 @@ public class Z80 {
 		/*
 		 * Exchange, Block Transfer, and Search Group
 		 */
+		
+		// TODO implement all
 
 		/*
 		 * 8-bit arithmetic group
@@ -880,7 +882,7 @@ public class Z80 {
 		return addr + (byte) d;
 	}
 
-	private boolean isConditionMet(Condition cond) {
+	private boolean isConditionMet(final Condition cond) {
 		return registers.testFlag(cond.getFlag()) == cond.getExpectedValue();
 	}
 
