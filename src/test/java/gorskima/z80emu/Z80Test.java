@@ -355,5 +355,16 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(A), is(71));
 	}
+	
+	@Test
+	public void test_ADC_A_HL() {
+		reg.setRegister(A, 200);
+		reg.setRegister(HL, 1000);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord16(0, 0x8E); // ADD A,(HL)
+		mem.writeWord8(1000, 54);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(255));
+	}
 
 }

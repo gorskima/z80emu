@@ -291,8 +291,8 @@ public class Z80 {
 
 		// ADD A,(HL)
 		case 0x86: {
-			int hl = registers.getRegister(Register.HL);
-			int n = memory.readWord8(hl);
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
 			alu.add(n);
 			break;
 		}
@@ -318,7 +318,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement ADC A,(HL)
+		// ADD A,(HL)
+		case 0x8E: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.adc(n);
+			break;
+		}
 		
 		// SUB r
 		case 0x90:
