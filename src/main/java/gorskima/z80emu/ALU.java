@@ -241,4 +241,20 @@ public class ALU {
 		registers.setFlag(Flag.C, adder.isBorrow());
 	}
 
+	// TODO temp. solution; move it out of ALU or combine with existing inc()
+	public int incExtern(final int op1) {
+		Adder adder = Adder.newAdder8();
+		int result = adder.add(op1, 1, 0);
+		setIncrementFlags(adder, result);
+		return result;
+	}
+
+	// TODO temp. solution; move it out of ALU or combine with existing dec()
+	public int decExtern(final int op1) {
+		Adder adder = Adder.newAdder8();
+		int result = adder.sub(op1, 1, 0);
+		setDecrementFlags(adder, result);
+		return result;
+	}
+
 }

@@ -464,4 +464,22 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.testFlag(Flag.Z), is(true));
 	}
+	
+	@Test
+	public void test_INC_HL() {
+		reg.setRegister(HL, 1000);
+		mem.writeWord8(0, 0x34); // INC (HL)
+		mem.writeWord8(1000, 23);
+		cpu.step();
+		assertThat(mem.readWord8(1000), is(24));
+	}
+	
+	@Test
+	public void test_DEC_HL() {
+		reg.setRegister(HL, 1000);
+		mem.writeWord8(0, 0x35); // DEC (HL)
+		mem.writeWord8(1000, 23);
+		cpu.step();
+		assertThat(mem.readWord8(1000), is(22));
+	}
 }

@@ -218,5 +218,27 @@ public class ALUTest {
 		assertThat(reg.testFlag(Flag.N), is(true));
 		assertThat(reg.testFlag(Flag.C), is(false));
 	}
+	
+	@Test
+	public void testIncExtern() {
+		int result = alu.incExtern(8);
+		assertThat(result, is(9));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(PV), is(false));
+		assertThat(reg.testFlag(N), is(false));
+	}
+	
+	@Test
+	public void testDecExtern() {
+		int result = alu.decExtern(128);
+		assertThat(result, is(127));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(PV), is(true));
+		assertThat(reg.testFlag(N), is(true));
+	}
 
 }

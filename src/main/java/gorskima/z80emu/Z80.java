@@ -515,10 +515,10 @@ public class Z80 {
 
 		// INC (HL) // TODO fix
 		case 0x34: {
-			int hl = registers.getRegister(Register.HL);
-			int value = memory.readWord8(hl);
-			// word = alu.inc(word);
-			memory.writeWord8(hl, value);
+			int addr = registers.getRegister(Register.HL);
+			int oldValue = memory.readWord8(addr);
+			int newValue = alu.incExtern(oldValue);
+			memory.writeWord8(addr, newValue);
 			break;
 		}
 
@@ -535,7 +535,14 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement DEC (HL)
+		// DEC (HL)
+		case 0x35: {
+			int addr = registers.getRegister(Register.HL);
+			int oldValue = memory.readWord8(addr);
+			int newValue = alu.decExtern(oldValue);
+			memory.writeWord8(addr, newValue);
+			break;
+		}
 
 		/*
 		 * General purpose arithmetic and CPU control
