@@ -725,7 +725,24 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement RET cc
+		// RET cc
+		case 0xC0:
+		case 0xC8:
+		case 0xD0:
+		case 0xD8:
+		case 0xE0:
+		case 0xE8:
+		case 0xF0:
+		case 0xF8: {
+			Condition condition = decoder.decodeCondition(opCode);
+			if (isConditionMet(condition)) {
+				int sp = registers.getRegister(Register.SP);
+				int addr = memory.readWord16(sp);
+				registers.setRegister(Register.SP, sp + 2);
+				registers.setRegister(Register.PC, addr);
+			}
+			break;
+		}
 		
 		// TODO implement RST p
 

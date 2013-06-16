@@ -535,4 +535,15 @@ public class Z80Test {
 		assertThat(mem.readWord16(0xFFFD), is(3));
 	}
 	
+	@Test
+	public void test_RET_cc() {
+		reg.setRegister(SP, 0xFFFD);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xD8); // RET C
+		mem.writeWord16(0xFFFD, 5000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(5000));
+		assertThat(reg.getRegister(SP), is(0xFFFF));
+	}
+	
 }
