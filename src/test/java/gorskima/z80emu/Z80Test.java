@@ -556,4 +556,21 @@ public class Z80Test {
 		assertThat(mem.readWord16(0xFFFD), is(1));
 	}
 	
+	@Test
+	public void test_JP_HL() {
+		reg.setRegister(HL, 1000);
+		mem.writeWord8(0, 0xE9);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(1000));
+	}
+	
+	@Test
+	public void test_JR_e() {
+		reg.setRegister(PC, 200);
+		mem.writeWord8(200, 0x18); // JP e
+		mem.writeWord8(201, 129);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(329));
+	}
+	
 }

@@ -664,7 +664,14 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement JR e
+		// JR e
+		case 0x18: {
+			int e = fetchWord8();
+			int pc = registers.getRegister(Register.PC);
+			int newPC = displace(pc, e - 2);
+			registers.setRegister(Register.PC, newPC);
+			break;
+		}
 		
 		// consider implementing the four below in a generic way
 		
@@ -676,7 +683,12 @@ public class Z80 {
 		
 		// TODO implement JR NZ,e
 		
-		// TODO implement JP (HL)
+		// JP (HL)
+		case 0xE9: {
+			int addr = registers.getRegister(Register.HL);
+			registers.setRegister(Register.PC, addr);
+			break;
+		}
 		
 		// TODO implement DJNZ
 
