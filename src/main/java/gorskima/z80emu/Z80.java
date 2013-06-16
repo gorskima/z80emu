@@ -513,7 +513,7 @@ public class Z80 {
 			break;
 		}
 
-		// INC (HL) // TODO fix
+		// INC (HL)
 		case 0x34: {
 			int addr = registers.getRegister(Register.HL);
 			int oldValue = memory.readWord8(addr);
