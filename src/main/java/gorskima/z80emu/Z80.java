@@ -420,7 +420,6 @@ public class Z80 {
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
-		case 0xB6:
 		case 0xB7: {
 			Register srcReg = decoder.decodeLowerR(opCode);
 			int n = registers.getRegister(srcReg);
@@ -435,7 +434,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement OR (HL)
+		// OR (HL)
+		case 0xB6: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.or(n);
+			break;
+		}
 		
 		// TODO implement XOR r
 
