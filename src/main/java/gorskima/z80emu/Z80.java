@@ -604,9 +604,25 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement INC ss
+		// INC ss
+		case 0x03:
+		case 0x13:
+		case 0x23:
+		case 0x33: {
+			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
+			alu.inc16(reg);
+			break;
+		}
 		
-		// TODO implement DEC ss
+		// DEC ss
+		case 0x0B:
+		case 0x1B:
+		case 0x2B:
+		case 0x3B: {
+			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
+			alu.dec16(reg);
+			break;
+		}
 		
 		/*
 		 * Rotate and Shift Grouop

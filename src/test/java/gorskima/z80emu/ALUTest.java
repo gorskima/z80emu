@@ -1,11 +1,13 @@
 package gorskima.z80emu;
 
 import static gorskima.z80emu.Flag.N;
+
 import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
 import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.HL;
+import static gorskima.z80emu.Register.BC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -239,6 +241,20 @@ public class ALUTest {
 		assertThat(reg.testFlag(Flag.H), is(true));
 		assertThat(reg.testFlag(PV), is(true));
 		assertThat(reg.testFlag(N), is(true));
+	}
+	
+	@Test
+	public void testInc16() {
+		reg.setRegister(HL, 40000);
+		alu.inc16(HL);
+		assertThat(reg.getRegister(HL), is(40001));
+	}
+	
+	@Test
+	public void testDec16() {
+		reg.setRegister(BC, 40000);
+		alu.dec16(BC);
+		assertThat(reg.getRegister(BC), is(39999));
 	}
 
 }

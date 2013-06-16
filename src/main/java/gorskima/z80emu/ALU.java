@@ -110,7 +110,7 @@ public class ALU {
 		registers.setFlag(Flag.N, true);
 		registers.setFlag(Flag.C, adder.isBorrow());
 	}
-	
+
 	private void setIncrementFlags(final Adder adder, final int result) {
 		registers.setFlag(Flag.S, getSign(result));
 		registers.setFlag(Flag.Z, isZero(result));
@@ -118,7 +118,7 @@ public class ALU {
 		registers.setFlag(Flag.PV, adder.isOverflow());
 		registers.setFlag(Flag.N, false);
 	}
-	
+
 	private void setDecrementFlags(final Adder adder, final int result) {
 		registers.setFlag(Flag.S, getSign(result));
 		registers.setFlag(Flag.Z, isZero(result));
@@ -232,7 +232,7 @@ public class ALU {
 		Adder adder = Adder.newAdder16();
 		int result = adder.sub(op1, op2, carry);
 		registers.setRegister(Register.HL, result);
-		
+
 		registers.setFlag(Flag.S, ((result >> 15) & 0x01) == 1);
 		registers.setFlag(Flag.Z, isZero(result));
 		registers.setFlag(Flag.H, adder.isHalfBorrow());
@@ -255,6 +255,21 @@ public class ALU {
 		int result = adder.sub(op1, 1, 0);
 		setDecrementFlags(adder, result);
 		return result;
+	}
+
+	// TODO merge with inc() or at least check if r is single word
+	public void inc16(final Register r) {
+		int op1 = registers.getRegister(r);
+		Adder adder = Adder.newAdder16();
+		int result = adder.add(op1, 1, 0);
+		registers.setRegister(r, result);
+	}
+
+	public void dec16(final Register r) {
+		int op1 = registers.getRegister(r);
+		Adder adder = Adder.newAdder16();
+		int result = adder.sub(op1, 1, 0);
+		registers.setRegister(r, result);
 	}
 
 }

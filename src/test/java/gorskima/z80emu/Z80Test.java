@@ -504,4 +504,20 @@ public class Z80Test {
 		assertThat(reg.testFlag(Flag.H), is(false));
 		assertThat(reg.testFlag(Flag.N), is(false));
 	}
+	
+	@Test
+	public void test_INC_ss() {
+		reg.setRegister(DE, 25000);
+		mem.writeWord8(0, 0x13);
+		cpu.step();
+		assertThat(reg.getRegister(DE), is(25001));
+	}
+	
+	@Test
+	public void test_DEC_ss() {
+		reg.setRegister(SP, 25000);
+		mem.writeWord8(0, 0x3B);
+		cpu.step();
+		assertThat(reg.getRegister(SP), is(24999));
+	}
 }
