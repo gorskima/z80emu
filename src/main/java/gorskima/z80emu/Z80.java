@@ -471,7 +471,19 @@ public class Z80 {
 			break;
 		}
 
-		// TODO implement CP r
+		// CP r
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBF: {
+			Register srcReg = decoder.decodeLowerR(opCode);
+			int n = registers.getRegister(srcReg);
+			alu.cp(n);
+			break;
+		}
 		
 		// CP n
 		case 0xFE: {
@@ -480,7 +492,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement CP (HL)
+		// CP (HL)
+		case 0xBE: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.cp(n);
+			break;
+		}
 
 		// INC r
 		case 0x04:
