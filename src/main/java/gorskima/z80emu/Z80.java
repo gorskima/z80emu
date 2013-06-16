@@ -695,7 +695,26 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement CALL cc,nn
+		// CALL cc,nn
+		case 0xC4:
+		case 0xCC:
+		case 0xD4:
+		case 0xDC:
+		case 0xE4:
+		case 0xEC:
+		case 0xF4:
+		case 0xFC: {
+			int addr = fetchWord16();
+			Condition condition = decoder.decodeCondition(opCode);
+			if (isConditionMet(condition)) {
+				int pc = registers.getRegister(Register.PC);
+				int sp = registers.getRegister(Register.SP);
+				memory.writeWord16(sp - 2, pc);
+				registers.setRegister(Register.SP, sp - 2);
+				registers.setRegister(Register.PC, addr);
+			}
+			break;
+		}
 
 		// RET
 		case 0xC9: {

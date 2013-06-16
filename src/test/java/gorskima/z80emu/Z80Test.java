@@ -2,6 +2,7 @@ package gorskima.z80emu;
 
 import static gorskima.z80emu.Flag.H;
 import static gorskima.z80emu.Flag.N;
+import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
 import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
@@ -18,6 +19,7 @@ import static gorskima.z80emu.Register.IY;
 import static gorskima.z80emu.Register.L;
 import static gorskima.z80emu.Register.R;
 import static gorskima.z80emu.Register.SP;
+import static gorskima.z80emu.Register.PC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -508,7 +510,7 @@ public class Z80Test {
 	@Test
 	public void test_INC_ss() {
 		reg.setRegister(DE, 25000);
-		mem.writeWord8(0, 0x13);
+		mem.writeWord8(0, 0x13); // INC DE
 		cpu.step();
 		assertThat(reg.getRegister(DE), is(25001));
 	}
@@ -516,8 +518,21 @@ public class Z80Test {
 	@Test
 	public void test_DEC_ss() {
 		reg.setRegister(SP, 25000);
-		mem.writeWord8(0, 0x3B);
+		mem.writeWord8(0, 0x3B); // DEC SP
 		cpu.step();
 		assertThat(reg.getRegister(SP), is(24999));
 	}
+	
+	@Test
+	public void test_CALL_cc_nn() {
+		reg.setRegister(SP, 0xFFFF);
+		reg.setFlag(PV, true);
+		mem.writeWord8(0, 0xEC); // CC PE,20000
+		mem.writeWord16(1, 20000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(20000));
+		assertThat(reg.getRegister(SP), is(0xFFFD));
+		assertThat(mem.readWord16(0xFFFD), is(3));
+	}
+	
 }
