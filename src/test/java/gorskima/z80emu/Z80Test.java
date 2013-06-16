@@ -376,5 +376,26 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(A), is(23));
 	}
+	
+	@Test
+	public void test_SBC_A_r() {
+		reg.setRegister(A, 51);
+		reg.setRegister(C, 20);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0x99); // SBC A,C
+		cpu.step();
+		assertThat(reg.getRegister(A), is(30));
+	}
+	
+	@Test
+	public void test_SBC_A_HL() {
+		reg.setRegister(A, 75);
+		reg.setRegister(HL, 35000);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord16(0, 0x9E); // SBC A,(HL)
+		mem.writeWord8(35000, 70);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(4));
+	}
 
 }

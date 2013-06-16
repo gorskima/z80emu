@@ -355,7 +355,19 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement SBC A,r
+		// SBC A,r
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9F: {
+			Register srcReg = decoder.decodeLowerR(opCode);
+			int n = registers.getRegister(srcReg);
+			alu.sbc(n);
+			break;
+		}
 
 		// SBC A,n
 		case 0xDE: {
@@ -364,7 +376,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement SBC A,(HL)
+		// SBC A,(HL)
+		case 0x9E: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.sbc(n);
+			break;
+		}
 		
 		// TODO implement AND r
 
