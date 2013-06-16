@@ -397,5 +397,23 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(A), is(4));
 	}
+	
+	@Test
+	public void test_AND_r() {
+		reg.setRegister(A, 0x83);
+		reg.setRegister(D, 0x05);
+		mem.writeWord8(0, 0xA2);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x01));
+	}
 
+	@Test
+	public void test_AND_HL() {
+		reg.setRegister(A, 0xF0);
+		reg.setRegister(HL, 300);
+		mem.writeWord8(0, 0xA6);
+		mem.writeWord8(300, 0x33);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x30));
+	}
 }

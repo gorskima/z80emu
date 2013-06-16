@@ -384,7 +384,19 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement AND r
+		// AND r
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA7: {
+			Register srcReg = decoder.decodeLowerR(opCode);
+			int n = registers.getRegister(srcReg);
+			alu.and(n);
+			break;
+		}
 
 		// AND n
 		case 0xE6: {
@@ -393,7 +405,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement AND (HL)
+		// AND (HL)
+		case 0xA6: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.and(n);
+			break;
+		}
 
 		// OR r
 		case 0xB0:
