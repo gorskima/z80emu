@@ -402,7 +402,7 @@ public class Z80Test {
 	public void test_AND_r() {
 		reg.setRegister(A, 0x83);
 		reg.setRegister(D, 0x05);
-		mem.writeWord8(0, 0xA2);
+		mem.writeWord8(0, 0xA2); // AND D
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x01));
 	}
@@ -411,7 +411,7 @@ public class Z80Test {
 	public void test_AND_HL() {
 		reg.setRegister(A, 0xF0);
 		reg.setRegister(HL, 300);
-		mem.writeWord8(0, 0xA6);
+		mem.writeWord8(0, 0xA6); // AND (HL)
 		mem.writeWord8(300, 0x33);
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x30));
@@ -421,7 +421,7 @@ public class Z80Test {
 	public void test_OR_HL() {
 		reg.setRegister(A, 0x70);
 		reg.setRegister(HL, 500);
-		mem.writeWord8(0, 0xB6);
+		mem.writeWord8(0, 0xB6); // OR (HL)
 		mem.writeWord8(500, 0x05);
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x75));
