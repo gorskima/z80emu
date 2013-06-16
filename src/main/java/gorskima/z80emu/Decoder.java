@@ -84,4 +84,8 @@ public class Decoder {
 		return (opCode & 0x08) > 0;
 	}
 
+	public int decodePage(final int opCode) {
+		return opCode & 0x38;
+	}
+
 }

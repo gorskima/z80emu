@@ -546,4 +546,14 @@ public class Z80Test {
 		assertThat(reg.getRegister(SP), is(0xFFFF));
 	}
 	
+	@Test
+	public void test_RST_p() {
+		mem.writeWord8(0, 0xEF); // RST 28h (RST 5)
+		reg.setRegister(SP, 0xFFFF);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(0x28));
+		assertThat(reg.getRegister(SP), is(0xFFFD));
+		assertThat(mem.readWord16(0xFFFD), is(1));
+	}
+	
 }

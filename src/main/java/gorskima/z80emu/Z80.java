@@ -744,7 +744,23 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement RST p
+		// RST p
+		case 0xC7:
+		case 0xCF:
+		case 0xD7:
+		case 0xDF:
+		case 0xE7:
+		case 0xEF:
+		case 0xF7:
+		case 0xFF: {
+			int addr = decoder.decodePage(opCode);
+			int pc = registers.getRegister(Register.PC);
+			int sp = registers.getRegister(Register.SP);
+			memory.writeWord16(sp - 2, pc);
+			registers.setRegister(Register.SP, sp - 2);
+			registers.setRegister(Register.PC, addr);
+			break;
+		}
 
 		/*
 		 * Input and output group

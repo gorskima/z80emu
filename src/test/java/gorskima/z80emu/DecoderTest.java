@@ -100,6 +100,18 @@ public class DecoderTest {
 		assertCondition(decoder.decodeCondition(0x30), Flag.S, false);
 		assertCondition(decoder.decodeCondition(0x38), Flag.S, true);
 	}
+	
+	@Test
+	public void testDecodingPage() {
+		assertThat(decoder.decodePage(0xC7), is(0x00));
+		assertThat(decoder.decodePage(0xCF), is(0x08));
+		assertThat(decoder.decodePage(0xD7), is(0x10));
+		assertThat(decoder.decodePage(0xDF), is(0x18));
+		assertThat(decoder.decodePage(0xE7), is(0x20));
+		assertThat(decoder.decodePage(0xEF), is(0x28));
+		assertThat(decoder.decodePage(0xF7), is(0x30));
+		assertThat(decoder.decodePage(0xFF), is(0x38));
+	}
 
 	// TODO why not writing hamcrest matcher?
 	private void assertCondition(final Condition decodeCondition, final Flag flag, final boolean expectedValue) {
