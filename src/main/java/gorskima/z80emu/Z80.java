@@ -675,13 +675,49 @@ public class Z80 {
 		
 		// consider implementing the four below in a generic way
 		
-		// TODO implement JR C,e
+		// JR C,e
+		case 0x38: {
+			int e = fetchWord8();
+			if (registers.testFlag(Flag.C)) {
+				int pc = registers.getRegister(Register.PC);
+				int newPC = displace(pc, e);
+				registers.setRegister(Register.PC, newPC);
+			}
+			break;
+		}
 		
-		// TODO implement JR NC,e
+		// JR NC,e
+		case 0x30: {
+			int e = fetchWord8();
+			if (!registers.testFlag(Flag.C)) {
+				int pc = registers.getRegister(Register.PC);
+				int newPC = displace(pc, e);
+				registers.setRegister(Register.PC, newPC);
+			}
+			break;
+		}
 		
-		// TODO implement JR Z,e
+		// JR Z,e
+		case 0x28: {
+			int e = fetchWord8();
+			if (registers.testFlag(Flag.Z)) {
+				int pc = registers.getRegister(Register.PC);
+				int newPC = displace(pc, e);
+				registers.setRegister(Register.PC, newPC);
+			}
+			break;
+		}
 		
-		// TODO implement JR NZ,e
+		// JR NZ,e
+		case 0x20: {
+			int e = fetchWord8();
+			if (!registers.testFlag(Flag.Z)) {
+				int pc = registers.getRegister(Register.PC);
+				int newPC = displace(pc, e);
+				registers.setRegister(Register.PC, newPC);
+			}
+			break;
+		}
 		
 		// JP (HL)
 		case 0xE9: {

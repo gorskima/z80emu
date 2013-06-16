@@ -567,10 +567,46 @@ public class Z80Test {
 	@Test
 	public void test_JR_e() {
 		reg.setRegister(PC, 200);
-		mem.writeWord8(200, 0x18); // JP e
+		mem.writeWord8(200, 0x18); // JR -128 (actually it is JR $-126 - assembler does the job)
 		mem.writeWord8(201, 128);
 		cpu.step();
 		assertThat(reg.getRegister(PC), is(74));
+	}
+	
+	@Test
+	public void test_JR_C_e() {
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0x38); // JR C,10 (actually it is JR C,$+12 - assembler does the job)
+		mem.writeWord8(1, 10);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(12));
+	}
+	
+	@Test
+	public void test_JR_NC_e() {
+		reg.setFlag(Flag.C, false);
+		mem.writeWord8(0, 0x30); // JR NC,20 (actually it is JR NC,$+22 - assembler does the job)
+		mem.writeWord8(1, 20);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(22));
+	}
+	
+	@Test
+	public void test_JR_Z_e() {
+		reg.setFlag(Flag.Z, true);
+		mem.writeWord8(0, 0x28); // JR Z,15 (actually it is JR Z,$+17 - assembler does the job)
+		mem.writeWord8(1, 15);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(17));
+	}
+	
+	@Test
+	public void test_JR_NZ_e() {
+		reg.setFlag(Flag.Z, false);
+		mem.writeWord8(0, 0x20); // JR NZ,15 (actually it is JR NZ,$+17 - assembler does the job)
+		mem.writeWord8(1, 15);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(17));
 	}
 	
 }
