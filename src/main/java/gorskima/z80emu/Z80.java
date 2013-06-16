@@ -726,7 +726,22 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement DJNZ
+		// DJNZ e
+		// FIXME find out a nicer implementation ;)
+		case 0x10: {
+			int e = fetchWord8();
+			
+			int B = registers.getRegister(Register.B);
+			int newB = (B - 1) & 0xFF;
+			registers.setRegister(Register.B, newB);
+			
+			if (newB != 0) {
+				int PC = registers.getRegister(Register.PC);
+				int newPC = displace(PC, e);
+				registers.setRegister(Register.PC, newPC);
+			}
+			break;
+		}
 
 		/*
 		 * Call and return group

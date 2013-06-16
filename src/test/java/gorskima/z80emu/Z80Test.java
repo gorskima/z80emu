@@ -609,4 +609,23 @@ public class Z80Test {
 		assertThat(reg.getRegister(PC), is(17));
 	}
 	
+	@Test
+	public void test_DJNZ_e() {
+		reg.setRegister(B, 2);
+		mem.writeWord8(0, 0x10); // DJNZ 6 (actually it is DJNZ $+8 - assembler does the job)
+		mem.writeWord8(1, 6);
+		mem.writeWord8(8, 0x10); // DJNZ 6
+		mem.writeWord8(9, 6);
+
+		cpu.step();
+		
+		assertThat(reg.getRegister(B), is(1));
+		assertThat(reg.getRegister(PC), is(8));
+		
+		cpu.step();
+		
+		assertThat(reg.getRegister(B), is(0));
+		assertThat(reg.getRegister(PC), is(10));
+	}
+	
 }
