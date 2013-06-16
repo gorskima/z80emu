@@ -668,7 +668,7 @@ public class Z80 {
 		case 0x18: {
 			int e = fetchWord8();
 			int pc = registers.getRegister(Register.PC);
-			int newPC = displace(pc, e - 2);
+			int newPC = displace(pc, e);
 			registers.setRegister(Register.PC, newPC);
 			break;
 		}

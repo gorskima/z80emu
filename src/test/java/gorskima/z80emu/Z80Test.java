@@ -568,9 +568,9 @@ public class Z80Test {
 	public void test_JR_e() {
 		reg.setRegister(PC, 200);
 		mem.writeWord8(200, 0x18); // JP e
-		mem.writeWord8(201, 129);
+		mem.writeWord8(201, 128);
 		cpu.step();
-		assertThat(reg.getRegister(PC), is(329));
+		assertThat(reg.getRegister(PC), is(74));
 	}
 	
 }
