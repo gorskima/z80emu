@@ -426,4 +426,23 @@ public class Z80Test {
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x75));
 	}
+	
+	@Test
+	public void test_XOR_r() {
+		reg.setRegister(A, 0xFF);
+		reg.setRegister(B, 0x0F);
+		mem.writeWord8(0, 0xA8); // XOR B
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0xF0));
+	}
+	
+	@Test
+	public void test_XOR_HL() {
+		reg.setRegister(A, 0x07);
+		reg.setRegister(HL, 200);
+		mem.writeWord8(0, 0xAE); // XOR (HL)
+		mem.writeWord8(200, 0x09);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x0E));
+	}
 }

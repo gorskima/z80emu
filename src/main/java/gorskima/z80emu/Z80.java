@@ -442,7 +442,19 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement XOR r
+		// XOR r
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAF: {
+			Register srcReg = decoder.decodeLowerR(opCode);
+			int n = registers.getRegister(srcReg);
+			alu.xor(n);
+			break;
+		}
 
 		// XOR n
 		case 0xEE: {
@@ -451,7 +463,13 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement XOR (HL)
+		// XOR (HL)
+		case 0xAE: {
+			int addr = registers.getRegister(Register.HL);
+			int n = memory.readWord8(addr);
+			alu.xor(n);
+			break;
+		}
 
 		// TODO implement CP r
 		
