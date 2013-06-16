@@ -61,7 +61,7 @@ public class ALU {
 		int result = adder.add(op1, 1, 0);
 		registers.setRegister(r, result);
 
-		setAdditionFlags(adder, result);
+		setIncrementFlags(adder, result);
 	}
 
 	public void dec(final Register r) {
@@ -71,7 +71,7 @@ public class ALU {
 		int result = adder.sub(op1, 1, 0);
 		registers.setRegister(r, result);
 
-		setSubstractionFlags(adder, result);
+		setDecrementFlags(adder, result);
 	}
 
 	public void cp(final int op2) {
@@ -109,6 +109,22 @@ public class ALU {
 		registers.setFlag(Flag.PV, adder.isOverflow());
 		registers.setFlag(Flag.N, true);
 		registers.setFlag(Flag.C, adder.isBorrow());
+	}
+	
+	private void setIncrementFlags(final Adder adder, final int result) {
+		registers.setFlag(Flag.S, getSign(result));
+		registers.setFlag(Flag.Z, isZero(result));
+		registers.setFlag(Flag.H, adder.isHalfCarry());
+		registers.setFlag(Flag.PV, adder.isOverflow());
+		registers.setFlag(Flag.N, false);
+	}
+	
+	private void setDecrementFlags(final Adder adder, final int result) {
+		registers.setFlag(Flag.S, getSign(result));
+		registers.setFlag(Flag.Z, isZero(result));
+		registers.setFlag(Flag.H, adder.isHalfBorrow());
+		registers.setFlag(Flag.PV, adder.isOverflow());
+		registers.setFlag(Flag.N, true);
 	}
 
 	public void and(final int op2) {

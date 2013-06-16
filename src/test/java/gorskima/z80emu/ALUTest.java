@@ -72,15 +72,14 @@ public class ALUTest {
 
 	@Test
 	public void testInc() {
-		reg.setRegister(A, 127);
+		reg.setRegister(A, 255);
 		alu.inc(A);
-		assertThat(reg.getRegister(A), is(128));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
+		assertThat(reg.getRegister(A), is(0));
+		assertThat(reg.testFlag(S), is(false));
+		assertThat(reg.testFlag(Z), is(true));
 		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(true));
+		assertThat(reg.testFlag(PV), is(false));
 		assertThat(reg.testFlag(N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(false));
 	}
 
 	@Test
@@ -93,7 +92,6 @@ public class ALUTest {
 		assertThat(reg.testFlag(Flag.H), is(true));
 		assertThat(reg.testFlag(PV), is(false));
 		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(true));
 	}
 
 	@Test
