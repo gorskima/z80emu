@@ -482,4 +482,26 @@ public class Z80Test {
 		cpu.step();
 		assertThat(mem.readWord8(1000), is(22));
 	}
+	
+	@Test
+	public void test_CCF() {
+		reg.setFlag(Flag.C, true);
+		reg.setFlag(Flag.N, true);
+		mem.writeWord8(0, 0x3F);
+		cpu.step();
+		assertThat(reg.testFlag(Flag.C), is(false));
+		assertThat(reg.testFlag(Flag.H), is(true));
+		assertThat(reg.testFlag(Flag.N), is(false));
+	}
+	
+	@Test
+	public void test_SCF() {
+		reg.setFlag(Flag.C, false);
+		reg.setFlag(Flag.N, true);
+		mem.writeWord8(0, 0x37);
+		cpu.step();
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+	}
 }

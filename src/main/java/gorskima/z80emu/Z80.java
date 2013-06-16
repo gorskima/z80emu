@@ -556,9 +556,22 @@ public class Z80 {
 			break;
 		}
 		
-		// TODO implement CCF
+		// CCF
+		case 0x3F: {
+			boolean c = registers.testFlag(Flag.C);
+			registers.setFlag(Flag.C, !c);
+			registers.setFlag(Flag.H, c);
+			registers.setFlag(Flag.N, false);
+			break;
+		}
 		
-		// TODO implement SCF
+		// SCF
+		case 0x37: {
+			registers.setFlag(Flag.C, true);
+			registers.setFlag(Flag.H, false);
+			registers.setFlag(Flag.N, false);
+			break;
+		}
 
 		// NOP
 		case 0x00: {
