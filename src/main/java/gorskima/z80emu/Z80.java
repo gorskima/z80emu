@@ -262,7 +262,9 @@ public class Z80 {
 		 * Exchange, Block Transfer, and Search Group
 		 */
 		
-		// TODO implement all
+		// TODO implement EX DE,HL
+		
+		// TODO implement EX (SP),HL
 
 		/*
 		 * 8-bit arithmetic group
@@ -656,7 +658,7 @@ public class Z80 {
 		 * Bit Set, Reset, and Test Group
 		 */
 		
-		// TODO implement all
+		// TODO implement all (Z80-only)
 
 		/*
 		 * Jump group
