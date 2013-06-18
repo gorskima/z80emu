@@ -628,4 +628,36 @@ public class Z80Test {
 		assertThat(reg.getRegister(PC), is(10));
 	}
 	
+	@Test
+	public void test_RLCA() {
+		reg.setRegister(A, 0x83);
+		mem.writeWord8(0, 0x07);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x07));
+	}
+	
+	@Test
+	public void test_RLA() {
+		reg.setRegister(A, 0x83);
+		mem.writeWord8(0, 0x17);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x06));
+	}
+	
+	@Test
+	public void test_RRCA() {
+		reg.setRegister(A, 0x83);
+		mem.writeWord8(0, 0x0F);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0xC1));
+	}
+	
+	@Test
+	public void test_RRA() {
+		reg.setRegister(A, 0x83);
+		mem.writeWord8(0, 0x1F);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x41));
+	}
+	
 }

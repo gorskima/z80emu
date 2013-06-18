@@ -628,7 +628,29 @@ public class Z80 {
 		 * Rotate and Shift Grouop
 		 */
 		
-		// TODO implement all
+		// RLCA
+		case 0x07: {
+			alu.rlca();
+			break;
+		}
+		
+		// RLA
+		case 0x17: {
+			alu.rla();
+			break;
+		}
+		
+		// RRCA
+		case 0x0F: {
+			alu.rrca();
+			break;
+		}
+		
+		// RRA
+		case 0x1F: {
+			alu.rra();
+			break;
+		}
 		
 		/*
 		 * Bit Set, Reset, and Test Group

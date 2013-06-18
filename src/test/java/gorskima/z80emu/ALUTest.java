@@ -1,13 +1,13 @@
 package gorskima.z80emu;
 
+import static gorskima.z80emu.Flag.H;
 import static gorskima.z80emu.Flag.N;
-
 import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
 import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
-import static gorskima.z80emu.Register.HL;
 import static gorskima.z80emu.Register.BC;
+import static gorskima.z80emu.Register.HL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -255,6 +255,86 @@ public class ALUTest {
 		reg.setRegister(BC, 40000);
 		alu.dec16(BC);
 		assertThat(reg.getRegister(BC), is(39999));
+	}
+	
+	@Test
+	public void testRlca() {
+		reg.setRegister(A, 0x81); // 10000001
+		reg.setFlag(Flag.C, false);
+		reg.setFlag(H, true);
+		reg.setFlag(N, true);
+		
+		alu.rlca();
+		assertThat(reg.getRegister(A), is(0x03)); // 00000011
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+		
+		alu.rlca();
+		assertThat(reg.getRegister(A), is(0x06)); // 00000110
+		assertThat(reg.testFlag(Flag.C), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+	}
+	
+	@Test
+	public void testRrca() {
+		reg.setRegister(A, 0x02); // 00000010
+		reg.setFlag(Flag.C, false);
+		reg.setFlag(H, true);
+		reg.setFlag(N, true);
+		
+		alu.rrca();
+		assertThat(reg.getRegister(A), is(0x01)); // 00000001
+		assertThat(reg.testFlag(Flag.C), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+		
+		alu.rrca();
+		assertThat(reg.getRegister(A), is(0x80)); // 10000000
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+	}
+	
+	@Test
+	public void testRla() {
+		reg.setFlag(Flag.C, false);
+		reg.setRegister(A, 0x85); // 10000101
+		reg.setFlag(H, true);
+		reg.setFlag(N, true);
+		
+		alu.rla();
+		assertThat(reg.getRegister(A), is(0x0A)); // 00001010
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+		
+		alu.rla();
+		assertThat(reg.getRegister(A), is(0x15)); // 00010101
+		assertThat(reg.testFlag(Flag.C), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+	}
+	
+	@Test
+	public void testRca() {
+		reg.setFlag(Flag.C, true);
+		reg.setRegister(A, 0x06); // 00000110
+		reg.setFlag(H, true);
+		reg.setFlag(N, true);
+		
+		alu.rra();
+		assertThat(reg.getRegister(A), is(0x83)); // 10000011
+		assertThat(reg.testFlag(Flag.C), is(false));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
+		
+		alu.rra();
+		assertThat(reg.getRegister(A), is(0x41)); // 01000001
+		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.testFlag(Flag.H), is(false));
+		assertThat(reg.testFlag(Flag.N), is(false));
 	}
 
 }

@@ -272,4 +272,43 @@ public class ALU {
 		registers.setRegister(r, result);
 	}
 
+	public void rlca() {
+		int op = registers.getRegister(Register.A);
+		int result = ((op << 1) | (op >>> 7)) & 0xFF;
+		registers.setRegister(Register.A, result);
+		registers.setFlag(Flag.C, ((op >>> 7) & 0x01) == 1);
+		setCommonRotationFlags();
+	}
+
+	public void rrca() {
+		int op = registers.getRegister(Register.A);
+		int result = ((op >>> 1) | (op << 7)) & 0xFF;
+		registers.setRegister(Register.A, result);
+		registers.setFlag(Flag.C, (op & 0x01) == 1);
+		setCommonRotationFlags();
+	}
+
+	public void rla() {
+		int op = registers.getRegister(Register.A);
+		int c = registers.testFlag(Flag.C) ? 1 : 0;
+		int result = ((op << 1) | c) & 0xFF;
+		registers.setRegister(Register.A, result);
+		registers.setFlag(Flag.C, ((op >>> 7) & 0x01) == 1);
+		setCommonRotationFlags();
+	}
+
+	public void rra() {
+		int op = registers.getRegister(Register.A);
+		int c = registers.testFlag(Flag.C) ? 1 : 0;
+		int result = (op >> 1) | (c << 7);
+		registers.setRegister(Register.A, result);
+		registers.setFlag(Flag.C, (op & 0x01) == 1);
+		setCommonRotationFlags();
+	}
+
+	private void setCommonRotationFlags() {
+		registers.setFlag(Flag.H, false);
+		registers.setFlag(Flag.N, false);
+	}
+
 }
