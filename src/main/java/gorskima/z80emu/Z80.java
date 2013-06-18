@@ -262,9 +262,24 @@ public class Z80 {
 		 * Exchange, Block Transfer, and Search Group
 		 */
 		
-		// TODO implement EX DE,HL
+		// EX DE,HL
+		case 0xEB: {
+			int de = registers.getRegister(Register.DE);
+			int hl = registers.getRegister(Register.HL);
+			registers.setRegister(Register.DE, hl);
+			registers.setRegister(Register.HL, de);
+			break;
+		}
 		
-		// TODO implement EX (SP),HL
+		// EX (SP),HL
+		case 0xE3: {
+			int hl = registers.getRegister(Register.HL);
+			int sp = registers.getRegister(Register.SP);
+			int nn = memory.readWord16(sp);
+			registers.setRegister(Register.HL, nn);
+			memory.writeWord16(sp, hl);
+			break;
+		}
 
 		/*
 		 * 8-bit arithmetic group

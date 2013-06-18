@@ -660,4 +660,28 @@ public class Z80Test {
 		assertThat(reg.getRegister(A), is(0x41));
 	}
 	
+	@Test
+	public void test_EX_DE_HL() {
+		reg.setRegister(DE, 12345);
+		reg.setRegister(HL, 33333);
+		mem.writeWord8(0, 0xEB); // EX DE,HL
+		cpu.step();
+		assertThat(reg.getRegister(DE), is(33333));
+		assertThat(reg.getRegister(HL), is(12345));
+	}
+	
+	@Test
+	public void test_EX_SP_HL() {
+		reg.setRegister(HL, 0x7012);
+		reg.setRegister(SP, 0x8856);
+		mem.writeWord8(0, 0xE3); // EX (SP),HL
+		mem.writeWord8(0x8856, 0x11);
+		mem.writeWord8(0x8857, 0x22);
+		cpu.step();
+		assertThat(reg.getRegister(HL), is(0x2211));
+		assertThat(reg.getRegister(SP), is(0x8856));
+		assertThat(mem.readWord8(0x8856), is(0x12));
+		assertThat(mem.readWord8(0x8857), is(0x70));
+	}
+	
 }
