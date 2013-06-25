@@ -17,9 +17,9 @@ import static gorskima.z80emu.Register.I;
 import static gorskima.z80emu.Register.IX;
 import static gorskima.z80emu.Register.IY;
 import static gorskima.z80emu.Register.L;
+import static gorskima.z80emu.Register.PC;
 import static gorskima.z80emu.Register.R;
 import static gorskima.z80emu.Register.SP;
-import static gorskima.z80emu.Register.PC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -489,7 +489,7 @@ public class Z80Test {
 	public void test_CCF() {
 		reg.setFlag(Flag.C, true);
 		reg.setFlag(Flag.N, true);
-		mem.writeWord8(0, 0x3F);
+		mem.writeWord8(0, 0x3F); // CCF
 		cpu.step();
 		assertThat(reg.testFlag(Flag.C), is(false));
 		assertThat(reg.testFlag(Flag.H), is(true));
@@ -500,7 +500,7 @@ public class Z80Test {
 	public void test_SCF() {
 		reg.setFlag(Flag.C, false);
 		reg.setFlag(Flag.N, true);
-		mem.writeWord8(0, 0x37);
+		mem.writeWord8(0, 0x37); // SCF
 		cpu.step();
 		assertThat(reg.testFlag(Flag.C), is(true));
 		assertThat(reg.testFlag(Flag.H), is(false));
@@ -631,7 +631,7 @@ public class Z80Test {
 	@Test
 	public void test_RLCA() {
 		reg.setRegister(A, 0x83);
-		mem.writeWord8(0, 0x07);
+		mem.writeWord8(0, 0x07); // RLCA
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x07));
 	}
@@ -639,7 +639,7 @@ public class Z80Test {
 	@Test
 	public void test_RLA() {
 		reg.setRegister(A, 0x83);
-		mem.writeWord8(0, 0x17);
+		mem.writeWord8(0, 0x17); // RLA
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x06));
 	}
@@ -647,7 +647,7 @@ public class Z80Test {
 	@Test
 	public void test_RRCA() {
 		reg.setRegister(A, 0x83);
-		mem.writeWord8(0, 0x0F);
+		mem.writeWord8(0, 0x0F); // RRCA
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0xC1));
 	}
@@ -655,7 +655,7 @@ public class Z80Test {
 	@Test
 	public void test_RRA() {
 		reg.setRegister(A, 0x83);
-		mem.writeWord8(0, 0x1F);
+		mem.writeWord8(0, 0x1F); // RRA
 		cpu.step();
 		assertThat(reg.getRegister(A), is(0x41));
 	}
@@ -684,4 +684,182 @@ public class Z80Test {
 		assertThat(mem.readWord8(0x8857), is(0x70));
 	}
 	
+	@Test
+	public void test_ADD_A_r() {
+		reg.setRegister(A, 33);
+		reg.setRegister(D, 77);
+		mem.writeWord8(0, 0x82); // ADD A,D
+		cpu.step();
+		assertThat(reg.getRegister(A), is(110));
+	}
+	
+	@Test
+	public void test_ADD_A_n() {
+		reg.setRegister(A, 15);
+		mem.writeWord8(0, 0xC6); // ADD A,40
+		mem.writeWord8(1, 40);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(55));
+	}
+	
+	@Test
+	public void test_ADD_A_HL() {
+		reg.setRegister(A, 60);
+		reg.setRegister(HL, 1000);
+		mem.writeWord8(0, 0x86); // ADD A,(HL)
+		mem.writeWord8(1000, 62);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(122));
+	}
+	
+	@Test
+	public void test_ADC_A_n() {
+		reg.setRegister(A, 13);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xCE); // ADC A,90
+		mem.writeWord8(1, 90);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(104));
+	}
+	
+	@Test
+	public void test_SUB_r() {
+		reg.setRegister(A, 100);
+		reg.setRegister(L, 48);
+		mem.writeWord8(0, 0x95); // SUB L
+		cpu.step();
+		assertThat(reg.getRegister(A), is(52));
+	}
+	
+	@Test
+	public void test_SUB_n() {
+		reg.setRegister(A, 75);
+		mem.writeWord8(0, 0xD6); // SUB 15
+		mem.writeWord8(1, 15);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(60));
+	}
+	
+	@Test
+	public void test_SBC_A_n() {
+		reg.setRegister(A, 101);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xDE); // SBC A,13
+		mem.writeWord8(1, 13);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(87));
+	}
+	
+	@Test
+	public void test_AND_n() {
+		reg.setRegister(A, 0x81);
+		mem.writeWord8(0, 0xE6); // AND E6h
+		mem.writeWord8(1, 0x7F);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x01));
+	}
+	
+	@Test
+	public void test_OR_r() {
+		reg.setRegister(A, 0x0F);
+		reg.setRegister(E, 0xE1);
+		mem.writeWord8(0, 0xB3); // OR E
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0xEF));
+	}
+	
+	@Test
+	public void test_OR_n() {
+		reg.setRegister(A, 0x10);
+		mem.writeWord8(0, 0xF6); // OR 23h
+		mem.writeWord8(1, 0x23);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x33));
+	}
+	
+	@Test
+	public void test_XOR_n() {
+		reg.setRegister(A, 0x81);
+		mem.writeWord8(0, 0xEE); // XOR 82h
+		mem.writeWord8(1, 0x82);
+		cpu.step();
+		assertThat(reg.getRegister(A), is(0x03));
+	}
+	
+	@Test
+	public void test_CP_n() {
+		reg.setRegister(A, 33);
+		mem.writeWord8(0, 0xFE); // CP 33
+		mem.writeWord8(1, 33);
+		cpu.step();
+		assertThat(reg.testFlag(Flag.Z), is(true));
+	}
+	
+	@Test
+	public void test_INC_r() {
+		reg.setRegister(L, 14);
+		mem.writeWord8(0, 0x2C); // INC L
+		cpu.step();
+		assertThat(reg.getRegister(L), is(15));
+	}
+	
+	@Test
+	public void test_DEC_r() {
+		reg.setRegister(B, 20);
+		mem.writeWord8(0, 0x05); // DEC B
+		cpu.step();
+		assertThat(reg.getRegister(B), is(19));
+	}
+	
+	@Test
+	public void test_CPL() {
+		reg.setRegister(A, 1);
+		mem.writeWord8(0, 0x2F); // CPL
+		cpu.step();
+		assertThat(reg.getRegister(A), is(254));
+	}
+	
+	@Test
+	public void test_NOP() {
+		mem.writeWord8(0, 0x00); // NOP
+		cpu.step(); // check if silently passes thru
+	}
+	
+	@Test
+	public void test_JP_nn() {
+		mem.writeWord8(0, 0xC3);
+		mem.writeWord16(1, 5000); // JP 5000
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(5000));
+	}
+	
+	@Test
+	public void test_JP_cc_nn() {
+		reg.setFlag(Z, true);
+		mem.writeWord8(0, 0xCA); // JP NZ,3000
+		mem.writeWord8(1, 3000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(3000));
+	}
+	
+	@Test
+	public void test_CALL_nn() {
+		reg.setRegister(SP, 0xFFFF);
+		mem.writeWord8(0, 0xCD); // CALL 5000 
+		mem.writeWord16(1, 5000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(5000));
+		assertThat(reg.getRegister(SP), is(0xFFFD));
+		assertThat(mem.readWord16(0xFFFD), is(3));
+	}
+	
+	@Test
+	public void test_RET() {
+		reg.setRegister(SP, 0xFFFD);
+		mem.writeWord8(0, 0xC9); // RET
+		mem.writeWord16(0xFFFD, 12000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(12000));
+		assertThat(reg.getRegister(SP), is(0xFFFF));
+	}
 }
