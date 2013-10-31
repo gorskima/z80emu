@@ -24,7 +24,7 @@ public class ALU {
 
 	public void adc(final int op2) {
 		int op1 = registers.getRegister(Register.A);
-		int carry = registers.testFlag(Flag.C) ? 1 : 0;
+		int carry = getCarry();
 
 		Adder adder = Adder.newAdder8();
 		int result = adder.add(op1, op2, carry);
@@ -45,7 +45,7 @@ public class ALU {
 
 	public void sbc(final int op2) {
 		int op1 = registers.getRegister(Register.A);
-		int carry = registers.testFlag(Flag.C) ? 1 : 0;
+		int carry = getCarry();
 
 		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, op2, carry);
@@ -211,7 +211,7 @@ public class ALU {
 
 	public void adc16(final int op2) {
 		int op1 = registers.getRegister(Register.HL);
-		int carry = registers.testFlag(Flag.C) ? 1 : 0;
+		int carry = getCarry();
 		Adder adder = Adder.newAdder16();
 		int result = adder.add(op1, op2, carry);
 		registers.setRegister(Register.HL, result);
@@ -227,7 +227,7 @@ public class ALU {
 
 	public void sbc16(final int op2) {
 		int op1 = registers.getRegister(Register.HL);
-		int carry = registers.testFlag(Flag.C) ? 1 : 0;
+		int carry = getCarry();
 
 		Adder adder = Adder.newAdder16();
 		int result = adder.sub(op1, op2, carry);
@@ -290,7 +290,7 @@ public class ALU {
 
 	public void rla() {
 		int op = registers.getRegister(Register.A);
-		int c = registers.testFlag(Flag.C) ? 1 : 0;
+		int c = getCarry();
 		int result = ((op << 1) | c) & 0xFF;
 		registers.setRegister(Register.A, result);
 		registers.setFlag(Flag.C, ((op >>> 7) & 0x01) == 1);
@@ -299,7 +299,7 @@ public class ALU {
 
 	public void rra() {
 		int op = registers.getRegister(Register.A);
-		int c = registers.testFlag(Flag.C) ? 1 : 0;
+		int c = getCarry();
 		int result = (op >> 1) | (c << 7);
 		registers.setRegister(Register.A, result);
 		registers.setFlag(Flag.C, (op & 0x01) == 1);
@@ -309,6 +309,10 @@ public class ALU {
 	private void setCommonRotationFlags() {
 		registers.setFlag(Flag.H, false);
 		registers.setFlag(Flag.N, false);
+	}
+	
+	private int getCarry() {
+		return registers.testFlag(Flag.C) ? 1 : 0;
 	}
 
 }
