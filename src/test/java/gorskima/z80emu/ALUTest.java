@@ -318,7 +318,7 @@ public class ALUTest {
 	}
 	
 	@Test
-	public void testRca() {
+	public void testRra() {
 		reg.setFlag(Flag.C, true);
 		reg.setRegister(A, 0x06); // 00000110
 		reg.setFlag(H, true);
