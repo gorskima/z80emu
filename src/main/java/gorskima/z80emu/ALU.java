@@ -54,26 +54,6 @@ public class ALU {
 		setSubstractionFlags(adder, result);
 	}
 
-	public void inc(final Register r) {
-		int op1 = registers.getRegister(r);
-
-		Adder adder = Adder.newAdder8();
-		int result = adder.add(op1, 1, 0);
-		registers.setRegister(r, result);
-
-		setIncrementFlags(adder, result);
-	}
-
-	public void dec(final Register r) {
-		int op1 = registers.getRegister(r);
-
-		Adder adder = Adder.newAdder8();
-		int result = adder.sub(op1, 1, 0);
-		registers.setRegister(r, result);
-
-		setDecrementFlags(adder, result);
-	}
-
 	public void cp(final int op2) {
 		int op1 = registers.getRegister(Register.A);
 
@@ -256,20 +236,33 @@ public class ALU {
 		setDecrementFlags(adder, result);
 		return result;
 	}
-
-	// TODO merge with inc() or at least check if r is single word
-	public void inc16(final Register r) {
+	
+	public void inc(final Register r) {
 		int op1 = registers.getRegister(r);
-		Adder adder = Adder.newAdder16();
+		
+		Adder adder = createAdderForRegister(r);
 		int result = adder.add(op1, 1, 0);
 		registers.setRegister(r, result);
+		
+		if (r.size == 1) {
+			setIncrementFlags(adder, result);
+		}
 	}
 
-	public void dec16(final Register r) {
+	private Adder createAdderForRegister(Register r) {
+		return r.size == 1 ? Adder.newAdder8() : Adder.newAdder16();
+	}
+
+	public void dec(final Register r) {
 		int op1 = registers.getRegister(r);
-		Adder adder = Adder.newAdder16();
+
+		Adder adder = createAdderForRegister(r);
 		int result = adder.sub(op1, 1, 0);
 		registers.setRegister(r, result);
+
+		if (r.size == 1) {
+			setDecrementFlags(adder, result);
+		}
 	}
 
 	public void rlca() {

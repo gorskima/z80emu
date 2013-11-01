@@ -627,7 +627,7 @@ public class Z80 {
 		case 0x23:
 		case 0x33: {
 			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
-			alu.inc16(reg);
+			alu.inc(reg);
 			break;
 		}
 		
@@ -637,7 +637,7 @@ public class Z80 {
 		case 0x2B:
 		case 0x3B: {
 			Register reg = decoder.decodeRegister(RegisterType.ss, opCode);
-			alu.dec16(reg);
+			alu.dec(reg);
 			break;
 		}
 		
