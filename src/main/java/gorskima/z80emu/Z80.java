@@ -238,10 +238,7 @@ public class Z80 {
 		case 0xE5:
 		case 0xF5: {
 			Register srcReg = decoder.decodeRegister(RegisterType.qq, opCode);
-			int value = registers.getRegister(srcReg);
-			int sp = registers.getRegister(Register.SP);
-			memory.writeWord16(sp - 2, value);
-			registers.setRegister(Register.SP, sp - 2);
+			pushOnStack(registers.getRegister(srcReg));
 			break;
 		}
 
@@ -251,10 +248,7 @@ public class Z80 {
 		case 0xE1:
 		case 0xF1: {
 			Register dstReg = decoder.decodeRegister(RegisterType.qq, opCode);
-			int sp = registers.getRegister(Register.SP);
-			int value = memory.readWord16(sp);
-			registers.setRegister(dstReg, value);
-			registers.setRegister(Register.SP, sp + 2);
+			registers.setRegister(dstReg, popFromStack());
 			break;
 		}
 		
@@ -789,10 +783,7 @@ public class Z80 {
 		// CALL nn
 		case 0xCD: {
 			int addr = fetchWord16();
-			int pc = registers.getRegister(Register.PC);
-			int sp = registers.getRegister(Register.SP);
-			memory.writeWord16(sp - 2, pc);
-			registers.setRegister(Register.SP, sp - 2);
+			pushOnStack(registers.getRegister(Register.PC));
 			registers.setRegister(Register.PC, addr);
 			break;
 		}
@@ -809,10 +800,7 @@ public class Z80 {
 			int addr = fetchWord16();
 			Condition condition = decoder.decodeCondition(opCode);
 			if (isConditionMet(condition)) {
-				int pc = registers.getRegister(Register.PC);
-				int sp = registers.getRegister(Register.SP);
-				memory.writeWord16(sp - 2, pc);
-				registers.setRegister(Register.SP, sp - 2);
+				pushOnStack(registers.getRegister(Register.PC));
 				registers.setRegister(Register.PC, addr);
 			}
 			break;
@@ -820,10 +808,7 @@ public class Z80 {
 
 		// RET
 		case 0xC9: {
-			int sp = registers.getRegister(Register.SP);
-			int addr = memory.readWord16(sp);
-			registers.setRegister(Register.SP, sp + 2);
-			registers.setRegister(Register.PC, addr);
+			registers.setRegister(Register.PC, popFromStack());
 			break;
 		}
 		
@@ -838,10 +823,7 @@ public class Z80 {
 		case 0xF8: {
 			Condition condition = decoder.decodeCondition(opCode);
 			if (isConditionMet(condition)) {
-				int sp = registers.getRegister(Register.SP);
-				int addr = memory.readWord16(sp);
-				registers.setRegister(Register.SP, sp + 2);
-				registers.setRegister(Register.PC, addr);
+				registers.setRegister(Register.PC, popFromStack());
 			}
 			break;
 		}
@@ -856,10 +838,7 @@ public class Z80 {
 		case 0xF7:
 		case 0xFF: {
 			int addr = decoder.decodePage(opCode);
-			int pc = registers.getRegister(Register.PC);
-			int sp = registers.getRegister(Register.SP);
-			memory.writeWord16(sp - 2, pc);
-			registers.setRegister(Register.SP, sp - 2);
+			pushOnStack(registers.getRegister(Register.PC));
 			registers.setRegister(Register.PC, addr);
 			break;
 		}
@@ -1177,6 +1156,18 @@ public class Z80 {
 
 	private boolean isConditionMet(final Condition cond) {
 		return registers.testFlag(cond.getFlag()) == cond.getExpectedValue();
+	}
+
+	private void pushOnStack(int nn) {
+		int sp = registers.getRegister(Register.SP);
+		registers.setRegister(Register.SP, sp - 2);
+		memory.writeWord16(sp - 2, nn);
+	}
+
+	private int popFromStack() {
+		int sp = registers.getRegister(Register.SP);
+		registers.setRegister(Register.SP, sp + 2);
+		return memory.readWord16(sp);
 	}
 
 	private void handleUnsupportedOpCode(final int opCode) {
