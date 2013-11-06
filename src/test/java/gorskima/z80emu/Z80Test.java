@@ -22,14 +22,23 @@ import static gorskima.z80emu.Register.R;
 import static gorskima.z80emu.Register.SP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class Z80Test {
 
 	private Registers reg = new Registers();
 	private Memory mem = new Memory();
 	private Z80 cpu = new Z80(reg, mem);
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testAttachingDeviceWithTooBigPortId() {
+		cpu.attachDevice(256, mock(IOPort.class));
+	}
 
 	@Test
 	public void test_LD_r_r() {
@@ -862,4 +871,28 @@ public class Z80Test {
 		assertThat(reg.getRegister(PC), is(12000));
 		assertThat(reg.getRegister(SP), is(0xFFFF));
 	}
+	
+	@Test
+	public void test_IN_A_n() {
+		IOPort port = mock(IOPort.class);
+		stub(port.read()).toReturn(7);
+		cpu.attachDevice(100, port);
+		mem.writeWord8(0, 0xDB);
+		mem.writeWord8(1, 100);
+		cpu.step();
+		verify(port).read();
+		assertThat(reg.getRegister(A), is(7));
+	}
+	
+	@Test
+	public void test_OUT_n_A() {
+		IOPort port = mock(IOPort.class);
+		cpu.attachDevice(50, port);
+		reg.setRegister(A, 123);
+		mem.writeWord8(0, 0xD3);
+		mem.writeWord8(1, 50);
+		cpu.step();
+		verify(port).write(123);
+	}
+	
 }

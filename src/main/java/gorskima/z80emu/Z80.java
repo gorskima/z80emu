@@ -3,11 +3,14 @@ package gorskima.z80emu;
 import gorskima.z80emu.Decoder.RegisterType;
 
 public class Z80 {
+	
+	private static final int IO_PORTS = 256;
 
 	private final Registers registers;
 	private final ALU alu;
 	private final Decoder decoder = new Decoder();
 	private final Memory memory;
+	private final IOPort ioPorts[] = new IOPort[IO_PORTS];
 
 	private boolean halt = false;
 	
@@ -16,6 +19,13 @@ public class Z80 {
 		this.registers = registers;
 		this.memory = memory;
 		this.alu = new ALU(registers);
+	}
+
+	public void attachDevice(int portId, IOPort device) {
+		if (portId >= IO_PORTS) {
+			throw new IllegalArgumentException("IO port number must be smaller than " + IO_PORTS);
+		}
+		this.ioPorts[portId] = device;
 	}
 
 	public void step() {
@@ -847,16 +857,22 @@ public class Z80 {
 		 * Input and output group
 		 */
 
-		// IN A,(n) // TODO implement
+		// IN A,(n)
 		case 0xDB: {
-			throw new UnsupportedOperationException("IN op is not yet implemented");
+			int portId = fetchWord8();
+			int n = ioPorts[portId].read();
+			registers.setRegister(Register.A, n);
+			break;
 		}
 		
 		// TODO implement IN r,(C)
 
-		// OUT (n),A // TODO implement
+		// OUT (n),A
 		case 0xD3: {
-			throw new UnsupportedOperationException("OUT op is not yet implemented");
+			int portId = fetchWord8();
+			int n = registers.getRegister(Register.A);
+			ioPorts[portId].write(n);
+			break;
 		}
 
 		default:
