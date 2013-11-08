@@ -27,7 +27,6 @@ import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class Z80Test {
 
