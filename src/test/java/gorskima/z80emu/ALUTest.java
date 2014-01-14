@@ -234,14 +234,21 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testCpl() {
-		reg.setRegister(A, 3);
+	@Parameters
+	public void testCpl(int op, int result) {
+		reg.setRegister(A, op);
 		alu.cpl();
-		assertThat(reg.getRegister(A), is(252));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(Flag.H), is(true)); // always
+		assertThat(reg.testFlag(N), is(true)); // always
+		// TODO check that S, Z, PV and C are unaffected
 	}
-
+	
+	private Object[] parametersForTestCpl() {
+		return $(
+			$(3, 252));
+	}
+	
 	@Test
 	public void testAdd16() {
 		reg.setRegister(HL, 40000);
