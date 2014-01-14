@@ -67,30 +67,46 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testSub() {
-		reg.setRegister(A, 80);
-		alu.sub(95);
-		assertThat(reg.getRegister(A), is(241));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(true));
+	@Parameters
+	public void testSub(int op1, int op2, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op1);
+		alu.sub(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestSub() {
+		return $(
+			$(80, 95, 241, true, false, true, false, true));
 	}
 
 	@Test
-	public void testSbc() {
-		reg.setRegister(A, 200);
-		reg.setFlag(Flag.C, true);
-		alu.sbc(100);
-		assertThat(reg.getRegister(A), is(99));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(true));
-		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	@Parameters
+	public void testSbc(int op1, boolean carry, int op2, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op1);
+		reg.setFlag(Flag.C, carry);
+		alu.sbc(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestSbc() {
+		return $(
+			$(200, true, 100, 99, false, false, false, true, false));
 	}
 
 	@Test
