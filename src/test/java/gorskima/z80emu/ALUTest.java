@@ -1,6 +1,7 @@
 package gorskima.z80emu;
 
 import static gorskima.z80emu.Flag.H;
+import static junitparams.JUnitParamsRunner.$;
 import static gorskima.z80emu.Flag.N;
 import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
@@ -10,39 +11,59 @@ import static gorskima.z80emu.Register.BC;
 import static gorskima.z80emu.Register.HL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JUnitParamsRunner.class)
 public class ALUTest {
 
 	private Registers reg = new Registers();
 	private ALU alu = new ALU(reg);
 
 	@Test
-	public void testAdd() {
-		reg.setRegister(A, 102);
-		alu.add(38);
-		assertThat(reg.getRegister(A), is(140));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(true));
-		assertThat(reg.testFlag(N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	@Parameters
+	public void testAdd(int op1, int op2, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op1);
+		alu.add(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestAdd() {
+		return $(
+			$(102, 38, 140, true, false, false, true, false));
 	}
 
 	@Test
-	public void testAdc() {
-		reg.setRegister(A, 75);
-		reg.setFlag(Flag.C, true);
-		alu.adc(200);
-		assertThat(reg.getRegister(A), is(20));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(true));
+	@Parameters
+	public void testAdc(int op1, boolean carry, int op2, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op1);
+		reg.setFlag(Flag.C, carry);
+		alu.adc(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestAdc() {
+		return $(
+			$(75, true, 200, 20, false, false, true, false, true));
 	}
 
 	@Test
