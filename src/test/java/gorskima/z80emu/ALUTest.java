@@ -150,31 +150,27 @@ public class ALUTest {
 		return $(
 			$(0, 255, true, false, true, false));
 	}
-
+	
 	@Test
-	public void testCp() {
-		reg.setRegister(A, 7);
-		alu.cp(5);
-		assertThat(reg.getRegister(A), is(7));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	@Parameters
+	public void testCp(int op1, int op2,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op1);
+		alu.cp(op2);
+		assertThat(reg.getRegister(A), is(op1)); // always
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
 	}
-
-	@Test
-	public void testCp_whenEqual() {
-		reg.setRegister(A, 8);
-		alu.cp(8);
-		assertThat(reg.getRegister(A), is(8));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(true));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	
+	private Object[] parametersForTestCp() {
+		return $(
+			$(7, 5, false, false, false, false, false),
+			$(8, 8, false, true, false, false, false));
 	}
 
 	@Test
