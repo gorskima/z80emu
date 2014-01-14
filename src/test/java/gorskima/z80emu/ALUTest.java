@@ -110,27 +110,45 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testInc() {
-		reg.setRegister(A, 255);
+	@Parameters
+	public void testInc(int op, int result,
+			boolean s, boolean z, boolean h, boolean pv) {
+		
+		reg.setRegister(A, op);
 		alu.inc(A);
-		assertThat(reg.getRegister(A), is(0));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(true));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(false));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		// TODO check that C is unaffected
+	}
+	
+	private Object[] parametersForTestInc() {
+		return $(
+			$(255, 0, false, true, true, false));
 	}
 
 	@Test
-	public void testDec() {
-		reg.setRegister(A, 0);
+	@Parameters
+	public void testDec(int op, int result,
+			boolean s, boolean z, boolean h, boolean pv) {
+		
+		reg.setRegister(A, op);
 		alu.dec(A);
-		assertThat(reg.getRegister(A), is(255));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(true));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		// TODO check that C is unaffected
+	}
+
+	private Object[] parametersForTestDec() {
+		return $(
+			$(0, 255, true, false, true, false));
 	}
 
 	@Test
