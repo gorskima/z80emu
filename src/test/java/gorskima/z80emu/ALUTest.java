@@ -174,16 +174,24 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testNeg() {
-		reg.setRegister(A, 7);
+	@Parameters
+	public void testNeg(int op, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(A, op);
 		alu.neg();
-		assertThat(reg.getRegister(A), is(249));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(true));
-		assertThat(reg.testFlag(Flag.C), is(true));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestNeg() {
+		return $(
+			$(7, 249, true, false, true, false, true));
 	}
 
 	@Test
