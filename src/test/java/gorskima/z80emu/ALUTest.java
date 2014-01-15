@@ -337,25 +337,43 @@ public class ALUTest {
 	}
 	
 	@Test
-	public void testIncExtern() {
-		int result = alu.incExtern(8);
-		assertThat(result, is(9));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(false));
+	@Parameters
+	public void testIncExtern(int op, int result,
+			boolean s, boolean z, boolean h, boolean pv) {
+		
+		int incremented = alu.incExtern(op);
+		assertThat(incremented, is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		// TODO check that C is unaffected
+	}
+	
+	private Object[] parametersForTestIncExtern() {
+		return $(
+			$(8, 9, false, false, false, false));
 	}
 	
 	@Test
-	public void testDecExtern() {
-		int result = alu.decExtern(128);
-		assertThat(result, is(127));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(true));
-		assertThat(reg.testFlag(N), is(true));
+	@Parameters
+	public void testDecExtern(int op, int result,
+			boolean s, boolean z, boolean h, boolean pv) {
+		
+		int decremented = alu.decExtern(op);
+		assertThat(decremented, is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(true)); // always
+		// TODO check that C is unaffected
+	}
+	
+	private Object[] parametersForTestDecExtern() {
+		return $(
+			$(128, 127, false, false, true, true));
 	}
 	
 	@Test
