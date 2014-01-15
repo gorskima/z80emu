@@ -391,23 +391,21 @@ public class ALUTest {
 	}
 	
 	@Test
-	public void testRlca() {
-		reg.setRegister(A, 0x81); // 10000001
-		reg.setFlag(Flag.C, false);
-		reg.setFlag(H, true);
-		reg.setFlag(N, true);
-		
+	@Parameters
+	public void testRlca(int op, int result, boolean c) {
+		reg.setRegister(A, op);
 		alu.rlca();
-		assertThat(reg.getRegister(A), is(0x03)); // 00000011
-		assertThat(reg.testFlag(Flag.C), is(true));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(Flag.N), is(false));
-		
-		alu.rlca();
-		assertThat(reg.getRegister(A), is(0x06)); // 00000110
-		assertThat(reg.testFlag(Flag.C), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(Flag.N), is(false));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(Flag.H), is(false)); // always
+		assertThat(reg.testFlag(Flag.N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+		// TODO check that S, Z and PV are unaffected
+	}
+	
+	private Object[] parametersForTestRlca() {
+		return $(
+			$(0x81, 0x03, true), // 10000001 -> 00000011
+			$(0x03, 0x06, false)); // 00000011 -> 00000110
 	}
 	
 	@Test
