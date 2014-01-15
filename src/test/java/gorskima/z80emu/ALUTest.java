@@ -274,13 +274,22 @@ public class ALUTest {
 	}
 	
 	@Test
-	public void testAdd16() {
-		reg.setRegister(HL, 40000);
-		alu.add16(30000);
-		assertThat(reg.getRegister(HL), is(4464));
-		assertThat(reg.testFlag(Flag.C), is(true));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(N), is(false));
+	@Parameters
+	public void testAdd16(int op1, int op2, int result,
+			boolean c, boolean h) {
+		
+		reg.setRegister(HL, op1);
+		alu.add16(op2);
+		assertThat(reg.getRegister(HL), is(result));
+		assertThat(reg.testFlag(Flag.C), is(c));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(N), is(false)); // always
+		// TODO check that S, Z and PV are unaffected
+	}
+	
+	private Object[] parametersForTestAdd16() {
+		return $(
+			$(40000, 30000, 4464, true, true));
 	}
 
 	@Test
