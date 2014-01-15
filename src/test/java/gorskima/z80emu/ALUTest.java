@@ -293,17 +293,25 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testAdc16() {
-		reg.setRegister(HL, 30000);
-		reg.setFlag(Flag.C, true);
-		alu.adc16(35538);
-		assertThat(reg.getRegister(HL), is(3));
-		assertThat(reg.testFlag(Flag.S), is(false));
-		assertThat(reg.testFlag(Flag.Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(Flag.PV), is(false));
-		assertThat(reg.testFlag(Flag.N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(true));
+	@Parameters
+	public void testAdc16(int op1, boolean carry, int op2, int result,
+			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+		
+		reg.setRegister(HL, op1);
+		reg.setFlag(Flag.C, carry);
+		alu.adc16(op2);
+		assertThat(reg.getRegister(HL), is(result));
+		assertThat(reg.testFlag(Flag.S), is(s));
+		assertThat(reg.testFlag(Flag.Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(h));
+		assertThat(reg.testFlag(Flag.PV), is(pv));
+		assertThat(reg.testFlag(Flag.N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+	}
+	
+	private Object[] parametersForTestAdc16() {
+		return $(
+			$(30000, true, 35538, 3, false, false, true, false, true));
 	}
 	
 	@Test
