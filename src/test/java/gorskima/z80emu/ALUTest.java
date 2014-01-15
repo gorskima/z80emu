@@ -1,7 +1,5 @@
 package gorskima.z80emu;
 
-import static gorskima.z80emu.Flag.H;
-import static junitparams.JUnitParamsRunner.$;
 import static gorskima.z80emu.Flag.N;
 import static gorskima.z80emu.Flag.PV;
 import static gorskima.z80emu.Flag.S;
@@ -9,6 +7,7 @@ import static gorskima.z80emu.Flag.Z;
 import static gorskima.z80emu.Register.A;
 import static gorskima.z80emu.Register.BC;
 import static gorskima.z80emu.Register.HL;
+import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import junitparams.JUnitParamsRunner;
