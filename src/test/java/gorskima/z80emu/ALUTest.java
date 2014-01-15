@@ -195,18 +195,26 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testAnd() {
-		reg.setRegister(A, 70);
-		alu.and(200);
-		assertThat(reg.getRegister(A), is(64));
-		assertThat(reg.testFlag(S), is(false));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(true));
-		assertThat(reg.testFlag(PV), is(false));
-		assertThat(reg.testFlag(N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	@Parameters
+	public void testAnd(int op1, int op2, int result,
+			boolean s, boolean z, boolean pv) {
+		
+		reg.setRegister(A, op1);
+		alu.and(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(true)); // always
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(false)); // always
 	}
 
+	private Object[] parametersForTestAnd() {
+		return $(
+			$(70, 200, 64, false, false, false));
+	}
+	
 	@Test
 	public void testOr() {
 		reg.setRegister(A, 70);
