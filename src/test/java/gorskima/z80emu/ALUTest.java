@@ -427,29 +427,28 @@ public class ALUTest {
 	}
 	
 	@Test
-	public void testRla() {
-		reg.setFlag(Flag.C, false);
-		reg.setRegister(A, 0x85); // 10000101
-		reg.setFlag(H, true);
-		reg.setFlag(N, true);
-		
+	@Parameters
+	public void testRla(int op, boolean carry, int result, boolean c) {
+		reg.setRegister(A, op);
+		reg.setFlag(Flag.C, carry);
 		alu.rla();
-		assertThat(reg.getRegister(A), is(0x0A)); // 00001010
-		assertThat(reg.testFlag(Flag.C), is(true));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(Flag.N), is(false));
-		
-		alu.rla();
-		assertThat(reg.getRegister(A), is(0x15)); // 00010101
-		assertThat(reg.testFlag(Flag.C), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(Flag.N), is(false));
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(Flag.H), is(false)); // always
+		assertThat(reg.testFlag(Flag.N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(c));
+		// TODO check that S, Z and PV are unaffected
+	}
+	
+	private Object[] parametersForTestRla() {
+		return $(
+			$(0x85, false, 0x0A, true), // [0]10000101 -> [1]00001010
+			$(0x0A, true, 0x15, false)); // [1]00001010 -> [0]00010101
 	}
 	
 	@Test
 	public void testRra() {
 		reg.setFlag(Flag.C, true);
-		reg.setRegister(A, 0x06); // 00000110
+		reg.setRegister(A, 0x06); // 00000110 
 		reg.setFlag(H, true);
 		reg.setFlag(N, true);
 		
