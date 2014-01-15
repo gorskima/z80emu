@@ -237,16 +237,24 @@ public class ALUTest {
 	}
 
 	@Test
-	public void testXor() {
-		reg.setRegister(A, 70);
-		alu.xor(200);
-		assertThat(reg.getRegister(A), is(142));
-		assertThat(reg.testFlag(S), is(true));
-		assertThat(reg.testFlag(Z), is(false));
-		assertThat(reg.testFlag(Flag.H), is(false));
-		assertThat(reg.testFlag(PV), is(true));
-		assertThat(reg.testFlag(N), is(false));
-		assertThat(reg.testFlag(Flag.C), is(false));
+	@Parameters
+	public void testXor(int op1, int op2, int result,
+			boolean s, boolean z, boolean pv) {
+		
+		reg.setRegister(A, op1);
+		alu.xor(op2);
+		assertThat(reg.getRegister(A), is(result));
+		assertThat(reg.testFlag(S), is(s));
+		assertThat(reg.testFlag(Z), is(z));
+		assertThat(reg.testFlag(Flag.H), is(false)); // always
+		assertThat(reg.testFlag(PV), is(pv));
+		assertThat(reg.testFlag(N), is(false)); // always
+		assertThat(reg.testFlag(Flag.C), is(false)); // always
+	}
+	
+	private Object[] parametersForTestXor() {
+		return $(
+			$(70, 200, 142, true, false, true));
 	}
 
 	@Test
