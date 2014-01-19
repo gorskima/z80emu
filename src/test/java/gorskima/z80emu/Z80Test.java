@@ -59,9 +59,9 @@ public class Z80Test {
 	public void test_LD_r_HL() {
 		reg.setRegister(HL, 350);
 		mem.writeWord8(0, 0x4E); // LD C,(HL)
-		mem.writeWord8(350, 718);
+		mem.writeWord8(350, 100);
 		cpu.step();
-		assertThat(reg.getRegister(C), is(718));
+		assertThat(reg.getRegister(C), is(100));
 	}
 
 	@Test
@@ -867,7 +867,7 @@ public class Z80Test {
 	public void test_JP_cc_nn() {
 		reg.setFlag(Z, true);
 		mem.writeWord8(0, 0xCA); // JP Z,3000
-		mem.writeWord8(1, 3000);
+		mem.writeWord16(1, 3000);
 		cpu.step();
 		assertThat(reg.getRegister(PC), is(3000));
 	}
