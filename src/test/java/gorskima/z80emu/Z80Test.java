@@ -544,6 +544,17 @@ public class Z80Test {
 	}
 	
 	@Test
+	public void test_CALL_cc_nn_conditionNotFulfilled() {
+		reg.setRegister(SP, 0xFFFF);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xD4); // CC NC,20000
+		mem.writeWord16(1, 15000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(3));
+		assertThat(reg.getRegister(SP), is(0xFFFF));
+	}
+	
+	@Test
 	public void test_RET_cc() {
 		reg.setRegister(SP, 0xFFFD);
 		reg.setFlag(Flag.C, true);
