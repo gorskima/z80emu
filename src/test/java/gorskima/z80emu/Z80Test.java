@@ -873,6 +873,15 @@ public class Z80Test {
 	}
 	
 	@Test
+	public void test_JP_cc_nn_conditionNotFulfilled() {
+		reg.setFlag(Z, true);
+		mem.writeWord8(0, 0x3A); // JP NZ,3000
+		mem.writeWord16(1, 3000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(3));
+	}
+	
+	@Test
 	public void test_CALL_nn() {
 		reg.setRegister(SP, 0xFFFF);
 		mem.writeWord8(0, 0xCD); // CALL 5000 
