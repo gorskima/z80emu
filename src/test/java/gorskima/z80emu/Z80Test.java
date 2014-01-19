@@ -866,7 +866,7 @@ public class Z80Test {
 	@Test
 	public void test_JP_cc_nn() {
 		reg.setFlag(Z, true);
-		mem.writeWord8(0, 0xCA); // JP NZ,3000
+		mem.writeWord8(0, 0xCA); // JP Z,3000
 		mem.writeWord8(1, 3000);
 		cpu.step();
 		assertThat(reg.getRegister(PC), is(3000));
