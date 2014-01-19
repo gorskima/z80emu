@@ -3,6 +3,8 @@ package gorskima.z80emu;
 import static gorskima.z80emu.Register.F;
 import static gorskima.z80emu.Register.PC;
 
+import com.google.common.base.Preconditions;
+
 public class Registers {
 
 	private static final int REG_OFFSET = 8;
@@ -33,6 +35,7 @@ public class Registers {
 	}
 
 	private void setRegister8(final Register r, final int value) {
+		Preconditions.checkArgument((value & 0xFFFFFF00) == 0, "Value may use only 1 least significant byte");
 		int addr = calculateAddr(r);
 		mem[addr] = value;
 	}
@@ -45,6 +48,7 @@ public class Registers {
 	}
 
 	private void setRegister16(final Register r, final int value) {
+		Preconditions.checkArgument((value & 0xFFFF0000) == 0, "Value may use only 2 least significant bytes");
 		int addr = calculateAddr(r);
 		int h = value >> 8;
 		int l = value & 0xFF;
