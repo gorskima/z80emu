@@ -566,6 +566,17 @@ public class Z80Test {
 	}
 	
 	@Test
+	public void test_RET_cc_conditionNotFulfilled() {
+		reg.setRegister(SP, 0xFFFD);
+		reg.setFlag(Flag.C, true);
+		mem.writeWord8(0, 0xD0); // RET NC
+		mem.writeWord16(0xFFFD, 5000);
+		cpu.step();
+		assertThat(reg.getRegister(PC), is(1));
+		assertThat(reg.getRegister(SP), is(0xFFFD));
+	}
+	
+	@Test
 	public void test_RST_p() {
 		mem.writeWord8(0, 0xEF); // RST 28h (RST 5)
 		reg.setRegister(SP, 0xFFFF);
