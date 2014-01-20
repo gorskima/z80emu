@@ -16,6 +16,8 @@ import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.common.base.Preconditions;
+
 @RunWith(JUnitParamsRunner.class)
 public class ALUTest {
 
@@ -24,8 +26,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testAdd(int op1, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testAdd(final int op1, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op1);
 		alu.add(op2);
@@ -45,8 +47,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testAdc(int op1, boolean carry, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testAdc(final int op1, final boolean carry, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op1);
 		reg.setFlag(Flag.C, carry);
@@ -67,8 +69,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testSub(int op1, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testSub(final int op1, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op1);
 		alu.sub(op2);
@@ -88,8 +90,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testSbc(int op1, boolean carry, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testSbc(final int op1, final boolean carry, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op1);
 		reg.setFlag(Flag.C, carry);
@@ -110,8 +112,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testInc(int op, int result,
-			boolean s, boolean z, boolean h, boolean pv) {
+	public void testInc(final int op, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv) {
 		
 		reg.setRegister(A, op);
 		alu.inc(A);
@@ -131,8 +133,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testDec(int op, int result,
-			boolean s, boolean z, boolean h, boolean pv) {
+	public void testDec(final int op, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv) {
 		
 		reg.setRegister(A, op);
 		alu.dec(A);
@@ -152,8 +154,8 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testCp(int op1, int op2,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testCp(final int op1, final int op2,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op1);
 		alu.cp(op2);
@@ -174,8 +176,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testNeg(int op, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testNeg(final int op, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(A, op);
 		alu.neg();
@@ -195,8 +197,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testAnd(int op1, int op2, int result,
-			boolean s, boolean z, boolean pv) {
+	public void testAnd(final int op1, final int op2, final int result,
+			final boolean s, final boolean z, final boolean pv) {
 		
 		reg.setRegister(A, op1);
 		alu.and(op2);
@@ -216,8 +218,8 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testOr(int op1, int op2, int result,
-			boolean s, boolean z, boolean pv) {
+	public void testOr(final int op1, final int op2, final int result,
+			final boolean s, final boolean z, final boolean pv) {
 		
 		reg.setRegister(A, op1);
 		alu.or(op2);
@@ -237,8 +239,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testXor(int op1, int op2, int result,
-			boolean s, boolean z, boolean pv) {
+	public void testXor(final int op1, final int op2, final int result,
+			final boolean s, final boolean z, final boolean pv) {
 		
 		reg.setRegister(A, op1);
 		alu.xor(op2);
@@ -258,7 +260,7 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testCpl(int op, int result) {
+	public void testCpl(final int op, final int result) {
 		reg.setRegister(A, op);
 		alu.cpl();
 		assertThat(reg.getRegister(A), is(result));
@@ -269,13 +271,14 @@ public class ALUTest {
 	
 	private Object[] parametersForTestCpl() {
 		return $(
-			$(3, 252));
+			$(3, 252),
+			$(100, 155));
 	}
 	
 	@Test
 	@Parameters
-	public void testAdd16(int op1, int op2, int result,
-			boolean c, boolean h) {
+	public void testAdd16(final int op1, final int op2, final int result,
+			final boolean c, final boolean h) {
 		
 		reg.setRegister(HL, op1);
 		alu.add16(op2);
@@ -293,8 +296,8 @@ public class ALUTest {
 
 	@Test
 	@Parameters
-	public void testAdc16(int op1, boolean carry, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testAdc16(final int op1, final boolean carry, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(HL, op1);
 		reg.setFlag(Flag.C, carry);
@@ -315,8 +318,8 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testSbc16(int op1, boolean carry, int op2, int result,
-			boolean s, boolean z, boolean h, boolean pv, boolean c) {
+	public void testSbc16(final int op1, final boolean carry, final int op2, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv, final boolean c) {
 		
 		reg.setRegister(HL, op1);
 		reg.setFlag(Flag.C, carry);
@@ -337,8 +340,8 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testIncExtern(int op, int result,
-			boolean s, boolean z, boolean h, boolean pv) {
+	public void testIncExtern(final int op, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv) {
 		
 		int incremented = alu.incExtern(op);
 		assertThat(incremented, is(result));
@@ -357,8 +360,8 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testDecExtern(int op, int result,
-			boolean s, boolean z, boolean h, boolean pv) {
+	public void testDecExtern(final int op, final int result,
+			final boolean s, final boolean z, final boolean h, final boolean pv) {
 		
 		int decremented = alu.decExtern(op);
 		assertThat(decremented, is(result));
@@ -391,7 +394,7 @@ public class ALUTest {
 	
 	@Test
 	@Parameters
-	public void testRlca(int op, int result, boolean c) {
+	public void testRlca(final int op, final int result, final boolean c) {
 		reg.setRegister(A, op);
 		alu.rlca();
 		assertThat(reg.getRegister(A), is(result));
@@ -403,13 +406,13 @@ public class ALUTest {
 	
 	private Object[] parametersForTestRlca() {
 		return $(
-			$(0x81, 0x03, true), // 10000001 -> 00000011
-			$(0x03, 0x06, false)); // 00000011 -> 00000110
+			$(b("10000001"), b("00000011"), true),
+			$(b("00000011"), b("00000110"), false));
 	}
 	
 	@Test
 	@Parameters
-	public void testRrca(int op, int result, boolean c) {
+	public void testRrca(final int op, final int result, final boolean c) {
 		reg.setRegister(A, op);
 		alu.rrca();
 		assertThat(reg.getRegister(A), is(result));
@@ -421,13 +424,13 @@ public class ALUTest {
 	
 	private Object[] parametersForTestRrca() {
 		return $(
-			$(0x02, 0x01, false), // 00000010 -> 00000001
-			$(0x01, 0x80, true)); // 00000001 -> 10000000
+			$(b("00000010"), b("00000001"), false),
+			$(b("00001101"), b("10000110"), true));
 	}
 	
 	@Test
 	@Parameters
-	public void testRla(int op, boolean carry, int result, boolean c) {
+	public void testRla(final int op, final boolean carry, final int result, final boolean c) {
 		reg.setRegister(A, op);
 		reg.setFlag(Flag.C, carry);
 		alu.rla();
@@ -440,13 +443,13 @@ public class ALUTest {
 	
 	private Object[] parametersForTestRla() {
 		return $(
-			$(0x85, false, 0x0A, true), // [0]10000101 -> [1]00001010
-			$(0x0A, true, 0x15, false)); // [1]00001010 -> [0]00010101
+			$(b("10000101"), false, b("00001010"), true),
+			$(b("00001010"), true, b("00010101"), false));
 	}
 	
 	@Test
 	@Parameters
-	public void testRra(int op, boolean carry, int result, boolean c) {
+	public void testRra(final int op, final boolean carry, final int result, final boolean c) {
 		reg.setRegister(A, op); 
 		reg.setFlag(Flag.C, carry);
 		alu.rra();
@@ -459,8 +462,20 @@ public class ALUTest {
 	
 	private Object[] parametersForTestRra() {
 		return $(
-			$(0x06, true, 0x83, false), // [1]00000110 -> [0]10000011
-			$(0x83, false, 0x41, true)); // [0]10000011 -> [1]01000001
+			$(b("00000110"), true, b("10000011"), false),
+			$(b("10000011"), false, b("01000001"), true));
 	}
 
+	private static int b(final String bits) {
+		Preconditions.checkArgument(bits.length() == 8);
+		int b = 0;
+		for (byte c : bits.getBytes()) {
+			b <<= 1;
+			if (c == '1') {
+				b |= 0x01;
+			}
+		}
+		return b;
+	}
+	
 }
