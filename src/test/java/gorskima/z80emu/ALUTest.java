@@ -213,7 +213,10 @@ public class ALUTest {
 
 	private Object[] parametersForTestAnd() {
 		return $(
-			$(70, 200, 64, false, false, false));
+			$(70, 200, 64, false, false, false),
+			$(b("00001111"), b("11001100"), b("00001100"), false, false, true),
+			$(b("11100000"), b("00010101"), b("00000000"), false, true, true),
+			$(b("11000011"), b("10001000"), b("10000000"), true, false, false));
 	}
 	
 	@Test
@@ -234,7 +237,10 @@ public class ALUTest {
 	
 	private Object[] parametersForTestOr() {
 		return $(
-			$(70, 200, 206, true, false, false));
+			$(70, 200, 206, true, false, false),
+			$(b("11000000"), b("10010000"), b("11010000"), true, false, false),
+			$(b("00001111"), b("11110000"), b("11111111"), true, false, true),
+			$(b("00000000"), b("00000000"), b("00000000"), false, true, true));
 	}
 
 	@Test
@@ -255,7 +261,10 @@ public class ALUTest {
 	
 	private Object[] parametersForTestXor() {
 		return $(
-			$(70, 200, 142, true, false, true));
+			$(70, 200, 142, true, false, true),
+			$(b("00100100"), b("10111100"), b("10011000"), true, false, false),
+			$(b("00001111"), b("11110000"), b("11111111"), true, false, true),
+			$(b("00000000"), b("00000000"), b("00000000"), false, true, true));
 	}
 
 	@Test
