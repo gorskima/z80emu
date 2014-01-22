@@ -13,18 +13,15 @@ public class ALU {
 	}
 
 	public void add(final int op2) {
-		int op1 = registers.getRegister(Register.A);
-
-		Adder adder = Adder.newAdder8();
-		int result = adder.add(op1, op2, 0);
-		registers.setRegister(Register.A, result);
-
-		setAdditionFlags(adder, result);
+		add(op2, 0);
 	}
 
 	public void adc(final int op2) {
+		add(op2, getCarry());
+	}
+	
+	private void add(int op2, int carry) {
 		int op1 = registers.getRegister(Register.A);
-		int carry = getCarry();
 
 		Adder adder = Adder.newAdder8();
 		int result = adder.add(op1, op2, carry);
@@ -34,18 +31,15 @@ public class ALU {
 	}
 
 	public void sub(final int op2) {
-		int op1 = registers.getRegister(Register.A);
-
-		Adder adder = Adder.newAdder8();
-		int result = adder.sub(op1, op2, 0);
-		registers.setRegister(Register.A, result);
-
-		setSubstractionFlags(adder, result);
+		sub(op2, 0);
 	}
 
 	public void sbc(final int op2) {
+		sub(op2, getCarry());
+	}
+	
+	private void sub(int op2, int carry) {
 		int op1 = registers.getRegister(Register.A);
-		int carry = getCarry();
 
 		Adder adder = Adder.newAdder8();
 		int result = adder.sub(op1, op2, carry);
