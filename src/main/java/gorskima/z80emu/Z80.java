@@ -2,6 +2,8 @@ package gorskima.z80emu;
 
 import gorskima.z80emu.Decoder.RegisterType;
 
+import java.io.IOException;
+
 public class Z80 {
 	
 	private static final int IO_PORTS = 256;
@@ -860,8 +862,17 @@ public class Z80 {
 		// IN A,(n)
 		case 0xDB: {
 			int portId = fetchWord8();
-			int n = ioPorts[portId].read();
-			registers.setRegister(Register.A, n);
+			if (portId == 0x08) {
+				try {
+					int n = System.in.read();
+					registers.setRegister(Register.A, n);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			} else {
+				throw new RuntimeException("Disallowed IN from port " + portId);
+			}
+
 			break;
 		}
 		
@@ -870,8 +881,13 @@ public class Z80 {
 		// OUT (n),A
 		case 0xD3: {
 			int portId = fetchWord8();
-			int n = registers.getRegister(Register.A);
-			ioPorts[portId].write(n);
+			if (portId == 0x08) {
+				int n = registers.getRegister(Register.A);
+				System.out.print((char)n);
+			} else {
+				throw new RuntimeException("Disallowed OUT to port " + portId);
+			}
+			
 			break;
 		}
 
